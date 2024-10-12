@@ -1,8 +1,14 @@
 import React from 'react'
+import NotificationNavbar from './NotificationNavbar'
 
 const Notifications = () => {
   return (
-    <div>Notifications</div>
+     <section>
+      <NotificationNavbar/>
+      <div className='px-2 sm:px-4'>
+        Notifications
+      </div>
+     </section>
   )
 }
 

@@ -4,7 +4,10 @@ import HomeNavbar from './HomeNavbar'
 const Home = () => {
   return (
     <section>
-      <HomeNavbar/>
+      <HomeNavbar />
+      <div className='px-2 sm:px-4'>
+        Home
+      </div>
     </section>
   )
 }

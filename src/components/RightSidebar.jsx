@@ -2,7 +2,7 @@ import React from 'react'
 
 const RightSidebar = () => {
   return (
-    <div className='col-span-3 border-r-1'>RightSidebar</div>
+    <div className='w-[25%] border-r-1 hidden lg:block'>RightSidebar</div>
   )
 }
 

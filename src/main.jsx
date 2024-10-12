@@ -13,6 +13,7 @@ import Hackathons from "./pages/Hackathons/Hackathons.jsx"
 import Jobs from "./pages/Jobs/Jobs.jsx"
 import Organizations from "./pages/Ogranizations/Organizations.jsx"
 import Profile from "./pages/Profile/Profile.jsx"
+import Settings from "./pages/Settings/Settings.jsx"
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />
+      },
+      {
+        path:"settings",
+        element:<Settings/>
       }
     ]
   }

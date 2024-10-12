@@ -1,8 +1,14 @@
 import React from 'react'
+import JobsNavbar from './JobsNavbar'
 
 const Jobs = () => {
   return (
-    <div>Jobs</div>
+    <section>
+      <JobsNavbar />
+      <div className='px-2 sm:px-4'>
+        Jobs
+      </div>
+    </section>
   )
 }
 

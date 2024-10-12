@@ -1,8 +1,14 @@
 import React from 'react'
+import MessagesNavbar from './MessagesNavbar'
 
 const Messages = () => {
   return (
-    <div>Messages</div>
+    <section>
+      <MessagesNavbar />
+      <div className='px-2 sm:px-4'>
+        Messages
+      </div>
+    </section>
   )
 }
 
