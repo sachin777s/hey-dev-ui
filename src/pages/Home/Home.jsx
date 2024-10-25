@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import HomeNavbar from './HomeNavbar'
+import Posts from './components/Posts'
+import CreatePost from './components/CreatePost';
 
 const Home = () => {
+
   return (
     <section>
       <HomeNavbar />
-      <div className='px-2 sm:px-4'>
-        Home
-      </div>
+      <CreatePost />
+      <Posts />
     </section>
   )
 }

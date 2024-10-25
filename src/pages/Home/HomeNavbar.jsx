@@ -1,10 +1,13 @@
-import { Button, ButtonGroup, Navbar, NavbarItem, NavbarMenuItem } from '@nextui-org/react'
+import { Navbar, Tabs } from '@nextui-org/react'
 import React from 'react'
+import { BsDot } from 'react-icons/bs'
 
 const HomeNavbar = () => {
     return (
         <Navbar isBordered>
-           
+            <div className='flex items-center'>
+                <BsDot /> <h1 className='text-xl font-semibold'>Home</h1>
+            </div>
         </Navbar>
     )
 }
