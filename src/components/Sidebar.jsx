@@ -86,7 +86,7 @@ const Sidebar = () => {
     return (
         <div
             ref={menuRef}
-            className={`py-4 px-2 w-1/2 sm:w-[20%] h-screen sm:h-auto border-l-1 flex flex-col items-start sm:items-end xl:items-start fixed top-0 transition-all duration-250 ${isNavbarOpen ? "left-0" : "-left-full"} sm:static bg-slate-50 shadow-xl shadow-slate-400 sm:shadow-none z-10`}
+            className={`py-4 px-2 w-1/2 sm:w-[20%] h-screen sm:min-h-screen border-l-1 flex flex-col items-start sm:items-end xl:items-start fixed top-0 transition-all duration-250 ${isNavbarOpen ? "left-0" : "-left-full"} sm:sticky bg-slate-50 shadow-xl shadow-slate-400 sm:shadow-none z-10`}
         >
 
             <Avatar

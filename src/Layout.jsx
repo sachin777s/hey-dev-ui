@@ -6,10 +6,10 @@ import RightSidebar from './components/RightSidebar'
 export default function Layout() {
 
     return (
-        <div className='mx-auto h-screen max-w-[1340px] flex justify-center flex-row'>
+        <div className='mx-auto max-w-[1340px] flex justify-center items-start flex-row relative'>
 
             <Sidebar />
-            <main className='w-full lg:w-[60%] border border-l-1 border-r-1 z-0'>
+            <main className='w-full lg:w-[60%] border-l-1 z-0'>
                 <Outlet />
             </main>
             <RightSidebar />
