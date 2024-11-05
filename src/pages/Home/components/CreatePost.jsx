@@ -92,7 +92,7 @@ const CreatePost = () => {
 
                 </div>
 
-                <div className='w-[90%] border-b-[0.5px]'></div>
+                <div className='w-[90%] border-b-[0.5px] border-[var(--primary-border)]'></div>
 
                 <div className='mt-4 flex items-center justify-between text-[var(--main-color)]'>
                     <div className='flex items-center justify-start gap-4'>
@@ -138,7 +138,7 @@ const CreatePost = () => {
                         <span>{postInput.length}/288</span>
                         <Button
                             isDisabled={!postInput}
-                            className='bg-[var(--main-color)] text-white'
+                            className='bg-[var(--main-color)] text-black'
                             radius='full'>
                             Post
                         </Button>

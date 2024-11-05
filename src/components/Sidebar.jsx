@@ -86,7 +86,7 @@ const Sidebar = () => {
     return (
         <div
             ref={menuRef}
-            className={`py-4 px-2 w-1/2 sm:w-[20%] h-screen sm:min-h-screen border-l-1 flex flex-col items-start sm:items-end xl:items-start fixed top-0 transition-all duration-250 ${isNavbarOpen ? "left-0" : "-left-full"} sm:sticky bg-slate-50 shadow-xl shadow-slate-400 sm:shadow-none z-10`}
+            className={`py-4 px-2 w-1/2 sm:w-[20%] h-screen sm:min-h-screen border-x-[0.5px] border-[var(--primary-border)] flex flex-col items-start sm:items-end xl:items-start fixed top-0 transition-all duration-300 ${isNavbarOpen ? "left-0" : "-left-full"} sm:sticky shadow-xl shadow-slate-400 sm:shadow-none z-10`}
         >
 
             <Avatar
@@ -146,25 +146,24 @@ const Sidebar = () => {
             </ul>
 
             <Button
-                color='primary'
+                color='success'
                 radius='full'
                 size='lg'
-                className='mt-4 w-full max-w-[200px] block sm:hidden xl:block'
+                className='mt-4 w-full bg-[var(--main-color)] max-w-[200px] block sm:hidden xl:block'
             >
                 Post
             </Button>
             <Button
-                color='primary'
                 radius='full'
                 size='lg'
                 isIconOnly
-                className='mt-4 hidden sm:flex xl:hidden items-center justify-center'
+                className='mt-4 bg-[var(--main-color)] hidden sm:flex xl:hidden items-center justify-center'
             >
                 <FaPlus color='white' />
             </Button>
 
             <User
-                className='mt-4 py-2 px-4 flex sm:hidden xl:flex hover:bg-gray-200  rounded-full font-medium'
+                className='mt-4 py-2 px-4 flex sm:hidden xl:flex border  rounded-full font-medium'
                 name="Sachin Kumar"
                 description="Product Designer"
                 avatarProps={{

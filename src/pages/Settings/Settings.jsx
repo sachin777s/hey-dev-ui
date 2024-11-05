@@ -1,5 +1,6 @@
 import React from 'react'
 import SettingsNavbar from './SettingsNavbar'
+import THemeChange from "../../components/ThemeChanger";
 
 const Settings = () => {
   return (
