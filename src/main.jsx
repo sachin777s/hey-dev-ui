@@ -14,6 +14,9 @@ import Jobs from "./pages/Jobs/Jobs.jsx"
 import Organizations from "./pages/Ogranizations/Organizations.jsx"
 import Profile from "./pages/Profile/Profile.jsx"
 import Settings from "./pages/Settings/Settings.jsx"
+import Posts from './pages/Profile/components/Posts.jsx';
+import Replies from './pages/Profile/components/Replies.jsx';
+import Likes from './pages/Profile/components/Likes.jsx';
 
 const router = createBrowserRouter([
   {
@@ -54,10 +57,24 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />
+        element: <Profile />,
+        children:[
+          {
+            path:"posts",
+            element:<Posts/>
+          },
+          {
+            path:"replies",
+            element:<Replies/>
+          },
+          {
+            path:"likes",
+            element:<Likes/>
+          }
+        ]
       },
       {
-        path:"settings",
+        path:"/settings",
         element:<Settings/>
       }
     ]

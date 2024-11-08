@@ -8,7 +8,7 @@ import { IoShareOutline } from 'react-icons/io5'
 const SinglePost = () => {
     return (
         <div
-            className='mt-12 w-full flex items-start gap-2'
+            className='py-6 w-full flex items-start gap-2 border-b-[0.5px] border-[var(--primary-border)]'
         >
             <div>
                 <Avatar
