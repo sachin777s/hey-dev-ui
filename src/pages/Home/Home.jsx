@@ -6,11 +6,11 @@ import CreatePost from './components/CreatePost';
 const Home = () => {
 
   return (
-    <section>
+    <>
       <HomeNavbar />
       <CreatePost />
       <Posts />
-    </section>
+    </>
   )
 }
 

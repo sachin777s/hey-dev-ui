@@ -1,14 +1,18 @@
 import React from 'react'
 import ProfileNavbar from './ProfileNavbar'
+import TabSection from './components/TabSection'
+import ProfileInfo from './components/ProfileInfo'
 
 const Profile = () => {
+
   return (
-    <section>
+    <>
       <ProfileNavbar />
-      <div className='px-2 sm:px-4'>
-        Profile
+      <div>
+        <ProfileInfo />
+        <TabSection />
       </div>
-    </section>
+    </>
   )
 }
 
