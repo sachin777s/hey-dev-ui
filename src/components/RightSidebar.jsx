@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom'
 const RightSidebar = () => {
 
   return (
-    <div className='w-[25%] min-h-screen border-x-[0.5px] border-[var(--primary-border)] hidden lg:block sticky top-0'>
+    <div className='w-[25%] min-h-screen border-x-[0.5px] border-color hidden lg:block sticky top-0'>
 
       {/* What's Happening */}
-      <div className='mt-6 py-4 mx-4 px-4 border-[0.5px] border-[var(--primary-border)] rounded-2xl'>
+      <div className='mt-6 py-4 mx-4 px-4 border-[0.5px] border-color rounded-2xl'>
         <h1 className='text-2xl font-semibold'>What's happening</h1>
         <div className='mt-4'>
           {
@@ -36,7 +36,7 @@ const RightSidebar = () => {
       </div>
 
       {/* Who to Follow */}
-      <div className='mt-6 mx-4 p-4 rounded-2xl border-[0.5px] border-[var(--primary-border)]'>
+      <div className='mt-6 mx-4 p-4 rounded-2xl border-[0.5px] border-color'>
         <h1 className='text-2xl font-semibold'>Who to follow</h1>
         <div className='mt-4'>
           {
