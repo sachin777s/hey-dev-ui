@@ -10,6 +10,9 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+    require('tailwind-scrollbar')
+  ],
   darkMode: "class"
 }
