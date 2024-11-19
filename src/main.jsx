@@ -19,6 +19,9 @@ import Replies from './pages/Profile/components/Replies.jsx';
 import Likes from './pages/Profile/components/Likes.jsx';
 import MessageUser from './pages/Messages/components/MessageUser.jsx';
 import UserList from './pages/Messages/components/UserList.jsx';
+import CommunityHome from './pages/Communities/components/CommunityHome.jsx';
+import StartCommunity from './pages/Communities/components/StartCommunity.jsx';
+import SIngleCommunityPage from './pages/Communities/components/SIngleCommunityPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -53,7 +56,22 @@ const router = createBrowserRouter([
       },
       {
         path: "/communities",
-        element: <Communities />
+        element: <Communities />,
+        children: [
+          {
+            path: "",
+            element: <CommunityHome />
+          },
+          {
+            path: ":id",
+            element: <SIngleCommunityPage />
+          },
+          {
+            path: "start-community",
+            element: <StartCommunity />
+          },
+
+        ]
       },
       {
         path: "/hackathons",
