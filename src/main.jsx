@@ -17,6 +17,11 @@ import Settings from "./pages/Settings/Settings.jsx"
 import Posts from './pages/Profile/components/Posts.jsx';
 import Replies from './pages/Profile/components/Replies.jsx';
 import Likes from './pages/Profile/components/Likes.jsx';
+import MessageUser from './pages/Messages/components/MessageUser.jsx';
+import UserList from './pages/Messages/components/UserList.jsx';
+import CommunityHome from './pages/Communities/components/CommunityHome.jsx';
+import StartCommunity from './pages/Communities/components/StartCommunity.jsx';
+import SIngleCommunityPage from './pages/Communities/components/SIngleCommunityPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -37,11 +42,36 @@ const router = createBrowserRouter([
       },
       {
         path: "/messages",
-        element: <Messages />
+        element: <Messages />,
+        children: [
+          {
+            path: "",
+            element: <UserList />
+          },
+          {
+            path: ":id",
+            element: <MessageUser />
+          }
+        ]
       },
       {
         path: "/communities",
-        element: <Communities />
+        element: <Communities />,
+        children: [
+          {
+            path: "",
+            element: <CommunityHome />
+          },
+          {
+            path: ":id",
+            element: <SIngleCommunityPage />
+          },
+          {
+            path: "start-community",
+            element: <StartCommunity />
+          },
+
+        ]
       },
       {
         path: "/hackathons",
@@ -58,24 +88,24 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
-        children:[
+        children: [
           {
-            path:"posts",
-            element:<Posts/>
+            path: "posts",
+            element: <Posts />
           },
           {
-            path:"replies",
-            element:<Replies/>
+            path: "replies",
+            element: <Replies />
           },
           {
-            path:"likes",
-            element:<Likes/>
+            path: "likes",
+            element: <Likes />
           }
         ]
       },
       {
-        path:"/settings",
-        element:<Settings/>
+        path: "/settings",
+        element: <Settings />
       }
     ]
   }

@@ -1,13 +1,12 @@
 import React from 'react'
-import MessagesNavbar from './MessagesNavbar'
+import MessagesNavbar from './components/MessagesNavbar'
+import { Outlet } from 'react-router-dom'
 
 const Messages = () => {
   return (
     <section>
       <MessagesNavbar />
-      <div className='px-2 sm:px-4'>
-        Messages
-      </div>
+      <Outlet />
     </section>
   )
 }
