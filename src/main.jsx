@@ -21,7 +21,9 @@ import MessageUser from './pages/Messages/components/MessageUser.jsx';
 import UserList from './pages/Messages/components/UserList.jsx';
 import CommunityHome from './pages/Communities/components/CommunityHome.jsx';
 import StartCommunity from './pages/Communities/components/StartCommunity.jsx';
-import SIngleCommunityPage from './pages/Communities/components/SIngleCommunityPage.jsx';
+import SingleCommunityPage from './pages/Communities/components/SingleCommunity/SIngleCommunity.jsx';
+import Members from './pages/Communities/components/SingleCommunity/Members.jsx';
+import SingleCommunityHome from './pages/Communities/components/SingleCommunity/SingleCommunityHome.jsx';
 
 const router = createBrowserRouter([
   {
@@ -64,7 +66,17 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <SIngleCommunityPage />
+            element: <SingleCommunityPage />,
+            children: [
+              {
+                path: "",
+                element: <SingleCommunityHome />
+              },
+              {
+                path: "members",
+                element: <Members />
+              }
+            ]
           },
           {
             path: "start-community",

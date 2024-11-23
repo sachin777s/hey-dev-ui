@@ -8,7 +8,7 @@ const CommunityHome = () => {
         <>
             {
                 Array(7).fill(0).map((_, i) => (
-                    <div className='mt-2'>
+                    <div className='mt-2 px-2 sm:px-4'>
                         <Link to={"/communities/543534"} className='flex items-center gap-4 hover:underline opacity-70 font-bold'>
                             <FaUserFriends />
                             {"React js fans"}
