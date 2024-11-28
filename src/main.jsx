@@ -24,6 +24,9 @@ import StartCommunity from './pages/Communities/components/StartCommunity.jsx';
 import SingleCommunityPage from './pages/Communities/components/SingleCommunity/SIngleCommunity.jsx';
 import Members from './pages/Communities/components/SingleCommunity/Members.jsx';
 import SingleCommunityHome from './pages/Communities/components/SingleCommunity/SingleCommunityHome.jsx';
+import JobsHome from './pages/Jobs/components/JobsHome.jsx';
+import SingleJob from './pages/Jobs/components/SingleJob.jsx';
+import ApplyJob from './pages/Jobs/components/ApplyJob.jsx';
 
 const router = createBrowserRouter([
   {
@@ -91,7 +94,21 @@ const router = createBrowserRouter([
       },
       {
         path: "/jobs",
-        element: <Jobs />
+        element: <Jobs />,
+        children: [
+          {
+            path: "",
+            element: <JobsHome />
+          },
+          {
+            path: ":id",
+            element: <SingleJob />
+          },
+          {
+            path: ":id/apply",
+            element:<ApplyJob/>
+          },
+        ]
       },
       {
         path: "/organizations",

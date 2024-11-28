@@ -1,13 +1,15 @@
 import React from 'react'
 import JobsNavbar from './JobsNavbar'
+import { Outlet } from 'react-router-dom'
 
 const Jobs = () => {
   return (
     <section>
       <JobsNavbar />
-      <div className='px-2 sm:px-4'>
-        Jobs
+      <div>
+        <Outlet/>
       </div>
+
     </section>
   )
 }
