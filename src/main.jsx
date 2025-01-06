@@ -1,32 +1,33 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { NextUIProvider } from '@nextui-org/react'
-import Layout from './Layout.jsx';
-import Home from "./pages/Home/Home.jsx"
-import Explore from './pages/Explore/Explore.jsx';
-import Notifications from "./pages/Notifications/Notifications.jsx"
-import Messages from "./pages/Messages/Messages.jsx"
-import Communities from "./pages/Communities/Communities.jsx"
-import Hackathons from "./pages/Hackathons/Hackathons.jsx"
-import Jobs from "./pages/Jobs/Jobs.jsx"
-import Organizations from "./pages/Ogranizations/Organizations.jsx"
-import Profile from "./pages/Profile/Profile.jsx"
-import Settings from "./pages/Settings/Settings.jsx"
-import Posts from './pages/Profile/components/Posts.jsx';
-import Replies from './pages/Profile/components/Replies.jsx';
-import Likes from './pages/Profile/components/Likes.jsx';
-import MessageUser from './pages/Messages/components/MessageUser.jsx';
-import UserList from './pages/Messages/components/UserList.jsx';
-import CommunityHome from './pages/Communities/components/CommunityHome.jsx';
-import StartCommunity from './pages/Communities/components/StartCommunity.jsx';
-import SingleCommunityPage from './pages/Communities/components/SingleCommunity/SIngleCommunity.jsx';
-import Members from './pages/Communities/components/SingleCommunity/Members.jsx';
-import SingleCommunityHome from './pages/Communities/components/SingleCommunity/SingleCommunityHome.jsx';
-import JobsHome from './pages/Jobs/components/JobsHome.jsx';
-import SingleJob from './pages/Jobs/components/SingleJob.jsx';
-import ApplyJob from './pages/Jobs/components/ApplyJob.jsx';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { NextUIProvider } from "@nextui-org/react";
+import Layout from "./Layout.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Explore from "./pages/Explore/Explore.jsx";
+import Notifications from "./pages/Notifications/Notifications.jsx";
+import Messages from "./pages/Messages/Messages.jsx";
+import Communities from "./pages/Communities/Communities.jsx";
+import Hackathons from "./pages/Hackathons/Hackathons.jsx";
+import Jobs from "./pages/Jobs/Jobs.jsx";
+import Organizations from "./pages/Ogranizations/Organizations.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
+import Settings from "./pages/Settings/Settings.jsx";
+import Posts from "./pages/Profile/components/Posts.jsx";
+import Replies from "./pages/Profile/components/Replies.jsx";
+import Likes from "./pages/Profile/components/Likes.jsx";
+import MessageUser from "./pages/Messages/components/MessageUser.jsx";
+import UserList from "./pages/Messages/components/UserList.jsx";
+import CommunityHome from "./pages/Communities/components/CommunityHome.jsx";
+import StartCommunity from "./pages/Communities/components/StartCommunity.jsx";
+import SingleCommunityPage from "./pages/Communities/components/SingleCommunity/SIngleCommunity.jsx";
+import Members from "./pages/Communities/components/SingleCommunity/Members.jsx";
+import SingleCommunityHome from "./pages/Communities/components/SingleCommunity/SingleCommunityHome.jsx";
+import JobsHome from "./pages/Jobs/components/JobsHome.jsx";
+import SingleJob from "./pages/Jobs/components/SingleJob.jsx";
+import ApplyJob from "./pages/Jobs/components/ApplyJob.jsx";
+import EditProfile from "./pages/Edit-Profile/EditProfile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,15 +36,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />
+        element: <Home />,
       },
       {
         path: "/explore",
-        element: <Explore />
+        element: <Explore />,
       },
       {
         path: "/notifications",
-        element: <Notifications />
+        element: <Notifications />,
       },
       {
         path: "/messages",
@@ -51,13 +52,13 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <UserList />
+            element: <UserList />,
           },
           {
             path: ":id",
-            element: <MessageUser />
-          }
-        ]
+            element: <MessageUser />,
+          },
+        ],
       },
       {
         path: "/communities",
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <CommunityHome />
+            element: <CommunityHome />,
           },
           {
             path: ":id",
@@ -73,24 +74,23 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <SingleCommunityHome />
+                element: <SingleCommunityHome />,
               },
               {
                 path: "members",
-                element: <Members />
-              }
-            ]
+                element: <Members />,
+              },
+            ],
           },
           {
             path: "start-community",
-            element: <StartCommunity />
+            element: <StartCommunity />,
           },
-
-        ]
+        ],
       },
       {
         path: "/hackathons",
-        element: <Hackathons />
+        element: <Hackathons />,
       },
       {
         path: "/jobs",
@@ -98,21 +98,21 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <JobsHome />
+            element: <JobsHome />,
           },
           {
             path: ":id",
-            element: <SingleJob />
+            element: <SingleJob />,
           },
           {
             path: ":id/apply",
-            element:<ApplyJob/>
+            element: <ApplyJob />,
           },
-        ]
+        ],
       },
       {
         path: "/organizations",
-        element: <Organizations />
+        element: <Organizations />,
       },
       {
         path: "profile",
@@ -120,30 +120,34 @@ const router = createBrowserRouter([
         children: [
           {
             path: "posts",
-            element: <Posts />
+            element: <Posts />,
           },
           {
             path: "replies",
-            element: <Replies />
+            element: <Replies />,
           },
           {
             path: "likes",
-            element: <Likes />
-          }
-        ]
+            element: <Likes />,
+          },
+        ],
+      },
+      {
+        path: "edit-profile",
+        element: <EditProfile />,
       },
       {
         path: "/settings",
-        element: <Settings />
-      }
-    ]
-  }
-])
+        element: <Settings />,
+      },
+    ],
+  },
+]);
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <NextUIProvider>
       <RouterProvider router={router} />
     </NextUIProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
