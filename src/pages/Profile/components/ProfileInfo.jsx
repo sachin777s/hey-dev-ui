@@ -4,14 +4,18 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
-import { RiLink } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import FollowersFollowingsModal from "./FollowersFollowingsModal";
 
 const ProfileInfo = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isFollowersModal, setIsFollowersModal] = useState();
+
   return (
     <div>
       <div className="pr-2 sm:pr-4 flex flex-col items-end">
@@ -58,6 +62,7 @@ const ProfileInfo = () => {
             radius="full"
             size="sm"
             variant="bordered"
+            onPress={()=>{setIsFollowersModal(true);onOpen()}}
           >
             <span>1.8K</span>
             <span className="opacity-70">Followers</span>
@@ -67,10 +72,16 @@ const ProfileInfo = () => {
             radius="full"
             size="sm"
             variant="bordered"
+            onPress={()=>{setIsFollowersModal(false);onOpen()}}
           >
             <span>89</span>
             <span className="opacity-70">Followings</span>
           </Button>
+          <FollowersFollowingsModal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            isFollowersModal={isFollowersModal}
+          />
         </div>
       </div>
     </div>
