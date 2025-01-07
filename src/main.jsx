@@ -28,6 +28,7 @@ import JobsHome from "./pages/Jobs/components/JobsHome.jsx";
 import SingleJob from "./pages/Jobs/components/SingleJob.jsx";
 import ApplyJob from "./pages/Jobs/components/ApplyJob.jsx";
 import EditProfile from "./pages/Edit-Profile/EditProfile.jsx";
+import About from "./pages/Profile/components/About.jsx";
 
 const router = createBrowserRouter([
   {
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
           {
             path: "likes",
             element: <Likes />,
+          },
+          {
+            path: "about",
+            element: <About />,
           },
         ],
       },
