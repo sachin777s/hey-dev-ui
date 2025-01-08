@@ -1,7 +1,7 @@
 import { Navbar } from '@nextui-org/react'
 import React from 'react'
 
-const OrganizationsNavbar = () => {
+const CompanyNavbar = () => {
   return (
    <Navbar isBordered>
     
@@ -9,4 +9,4 @@ const OrganizationsNavbar = () => {
   )
 }
 
-export default OrganizationsNavbar
+export default CompanyNavbar

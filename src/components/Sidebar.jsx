@@ -3,11 +3,9 @@ import Logo from "../assets/heydev192x192.png"
 import { IoHomeOutline, IoSearch } from "react-icons/io5";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { FaRegMessage } from "react-icons/fa6";
-import { MdOutlineEmojiEvents } from "react-icons/md";
 import { IoBagOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { TbUsers } from "react-icons/tb";
-import { FaRegBookmark } from "react-icons/fa";
 import { CgOrganisation } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { NavLink } from 'react-router-dom';
@@ -46,19 +44,14 @@ const Sidebar = () => {
             route: "/communities"
         },
         {
-            label: "Hackathons",
-            icon: <MdOutlineEmojiEvents />,
-            route: "/hackathons"
-        },
-        {
             label: "Jobs",
             icon: <IoBagOutline />,
             route: "/jobs"
         },
         {
-            label: "Organizations",
+            label: "Company",
             icon: <CgOrganisation />,
-            route: "/organizations"
+            route: "/company",
         },
         {
             label: "Profile",
