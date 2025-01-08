@@ -29,6 +29,7 @@ import SingleJob from "./pages/Jobs/components/SingleJob.jsx";
 import ApplyJob from "./pages/Jobs/components/ApplyJob.jsx";
 import EditProfile from "./pages/Edit-Profile/EditProfile.jsx";
 import About from "./pages/Profile/components/About.jsx";
+import CreateCompany from "./pages/Create-Company/CreateCompany.jsx";
 
 const router = createBrowserRouter([
   {
@@ -144,6 +145,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />,
+      },
+      {
+        path: "create-company",
+        element: <CreateCompany />,
       },
     ],
   },
