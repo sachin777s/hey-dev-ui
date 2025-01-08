@@ -3,13 +3,16 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
 import React from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import { CgOrganisation } from "react-icons/cg";
+import EditCompanyModal from "./EditCompanyModal";
 
 const CompanyInfo = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <div>
       <div className="pr-2 sm:pr-4 flex flex-col items-end">
@@ -20,10 +23,13 @@ const CompanyInfo = () => {
             </div>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="settings">Edit Compnay Details</DropdownItem>
+            <DropdownItem key="settings" onPress={onOpen}>
+              Edit Compnay Details
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
+      <EditCompanyModal isOpen={isOpen} onOpenChange={onOpenChange} />
 
       <div className="mt-6 flex items-center justify-center">
         <div className="h-36 md:h-44 w-36 md:w-44 rounded-full border-2 border-[var(--main-color)] overflow-hidden">
