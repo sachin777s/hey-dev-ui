@@ -9,9 +9,8 @@ import Explore from "./pages/Explore/Explore.jsx";
 import Notifications from "./pages/Notifications/Notifications.jsx";
 import Messages from "./pages/Messages/Messages.jsx";
 import Communities from "./pages/Communities/Communities.jsx";
-import Hackathons from "./pages/Hackathons/Hackathons.jsx";
 import Jobs from "./pages/Jobs/Jobs.jsx";
-import Organizations from "./pages/Ogranizations/Organizations.jsx";
+import Company from "./pages/Company/Company.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Settings from "./pages/Settings/Settings.jsx";
 import Posts from "./pages/Profile/components/Posts.jsx";
@@ -30,6 +29,9 @@ import ApplyJob from "./pages/Jobs/components/ApplyJob.jsx";
 import EditProfile from "./pages/Edit-Profile/EditProfile.jsx";
 import About from "./pages/Profile/components/About.jsx";
 import CreateCompany from "./pages/Create-Company/CreateCompany.jsx";
+import JobsPage from "./pages/Company/components/JobsPage.jsx";
+import ApplicantsPage from "./pages/Company/components/ApplicantsPage.jsx";
+import AboutPage from "./pages/Company/components/AboutPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -91,10 +93,6 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/hackathons",
-        element: <Hackathons />,
-      },
-      {
         path: "/jobs",
         element: <Jobs />,
         children: [
@@ -113,8 +111,22 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/organizations",
-        element: <Organizations />,
+        path: "/company",
+        element: <Company />,
+        children: [
+          {
+            path: "jobs",
+            element: <JobsPage />,
+          },
+          {
+            path: "applicants",
+            element: <ApplicantsPage />,
+          },
+          {
+            path: "about",
+            element: <AboutPage />,
+          },
+        ],
       },
       {
         path: "profile",
