@@ -18,7 +18,7 @@ const SingleCommunityHome = () => {
       <div className="">
         <img
           className='w-full'
-          src="https://pbs.twimg.com/community_banner_img/1856388724990586880/u6yBIu77?format=jpg&name=small"
+          src="https://pbs.twimg.com/community_banner_img/1579498877941649408/ib8y5Ccy?format=jpg&name=360x360"
           alt=""
         />
         <div className='pl-2 sm:pl-4 flex flex-col'>
