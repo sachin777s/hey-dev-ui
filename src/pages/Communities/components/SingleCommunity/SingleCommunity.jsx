@@ -1,11 +1,24 @@
-import { Avatar, AvatarGroup, Button } from "@nextui-org/react";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  useDisclosure,
+} from "@nextui-org/react";
 import React, { useEffect } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa6";
 import { IoMdInformationCircle } from "react-icons/io";
 import { MdArticle } from "react-icons/md";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import EditCommunityModal from "./EditCommunityModal";
 
 const SingleCommunity = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const links = [
     {
       label: "Posts",
@@ -26,9 +39,9 @@ const SingleCommunity = () => {
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    navigate("/communities/:id/posts")
-  },[])
+  useEffect(() => {
+    navigate("/communities/:id/posts");
+  }, []);
 
   return (
     <>
@@ -38,8 +51,29 @@ const SingleCommunity = () => {
           src="https://pbs.twimg.com/community_banner_img/1579498877941649408/ib8y5Ccy?format=jpg&name=360x360"
           alt=""
         />
-        <div className="pl-2 sm:pl-4 flex flex-col">
-          <span className="mt-2 text-3xl font-semibold">NExt DEvs</span>
+        <div className="relative px-2 sm:px-4 flex flex-col">
+          <div className="mt-2 flex items-start justify-between">
+            <span className=" text-3xl font-semibold">NExt DEvs</span>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <div className="cursor-pointer">
+                  <BsThreeDots size={24} />
+                </div>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="settings">
+                  <Link
+                    onClick={onOpen}
+                    className="block w-full"
+                    to={"#"}
+                  >
+                    Edit Community Settings
+                  </Link>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <EditCommunityModal isOpen={isOpen} onOpenChange={onOpenChange} />
+          </div>
           <span className="mt-2 text-xl">
             👽Welome to the {"NExt DEvs"} Community
           </span>
