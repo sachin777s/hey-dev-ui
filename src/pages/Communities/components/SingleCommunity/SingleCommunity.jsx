@@ -1,9 +1,9 @@
 import { Avatar, AvatarGroup, Button } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaUsers } from "react-icons/fa6";
 import { IoMdInformationCircle } from "react-icons/io";
 import { MdArticle } from "react-icons/md";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const SingleCommunity = () => {
   const links = [
@@ -23,6 +23,12 @@ const SingleCommunity = () => {
       icon: <FaUsers />,
     },
   ];
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    navigate("/communities/:id/posts")
+  },[])
 
   return (
     <>
@@ -63,7 +69,7 @@ const SingleCommunity = () => {
       </div>
 
       {/* Tab Section */}
-      <div className="mt-4 py-1 grid grid-cols-3 gap-2 bg-[#D4D4D8] dark:bg-[#3F3F46]">
+      <div className="mt-4 py-1 px-2 grid grid-cols-3 gap-2 bg-[#D4D4D8] dark:bg-[#3F3F46]">
         {links.map((_, i) => (
           <NavLink
             className={({ isActive }) =>
