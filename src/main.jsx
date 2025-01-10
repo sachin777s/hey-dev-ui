@@ -18,11 +18,10 @@ import Replies from "./pages/Profile/components/Replies.jsx";
 import Likes from "./pages/Profile/components/Likes.jsx";
 import MessageUser from "./pages/Messages/components/MessageUser.jsx";
 import UserList from "./pages/Messages/components/UserList.jsx";
-import CommunityHome from "./pages/Communities/components/CommunityHome.jsx";
+import CommunitiesHome from "./pages/Communities/components/CommunitiesHome.jsx";
 import StartCommunity from "./pages/Communities/components/StartCommunity.jsx";
-import SingleCommunityPage from "./pages/Communities/components/SingleCommunity/SIngleCommunity.jsx";
 import Members from "./pages/Communities/components/SingleCommunity/Members.jsx";
-import SingleCommunityHome from "./pages/Communities/components/SingleCommunity/SingleCommunityHome.jsx";
+import SingleCommunity from "./pages/Communities/components/SingleCommunity/SingleCommunity.jsx";
 import JobsHome from "./pages/Jobs/components/JobsHome.jsx";
 import SingleJob from "./pages/Jobs/components/SingleJob.jsx";
 import ApplyJob from "./pages/Jobs/components/ApplyJob.jsx";
@@ -32,6 +31,8 @@ import CreateCompany from "./pages/Create-Company/CreateCompany.jsx";
 import JobsPage from "./pages/Company/components/JobsPage.jsx";
 import ApplicantsPage from "./pages/Company/components/ApplicantsPage.jsx";
 import AboutPage from "./pages/Company/components/AboutPage.jsx";
+import CommunityPosts from "./pages/Communities/components/SingleCommunity/CommunityPosts.jsx";
+import AboutCommunity from "./pages/Communities/components/SingleCommunity/AboutCommunity.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,15 +71,19 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <CommunityHome />,
+            element: <CommunitiesHome />,
           },
           {
             path: ":id",
-            element: <SingleCommunityPage />,
+            element: <SingleCommunity />,
             children: [
               {
-                path: "",
-                element: <SingleCommunityHome />,
+                path: "posts",
+                element: <CommunityPosts />,
+              },
+              {
+                path: "about",
+                element: <AboutCommunity />,
               },
               {
                 path: "members",

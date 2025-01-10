@@ -3,7 +3,7 @@ import SinglePost from '../../../components/SinglePost'
 import { FaUserFriends } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-const CommunityHome = () => {
+const CommunitiesHome = () => {
     return (
         <>
             {
@@ -21,4 +21,4 @@ const CommunityHome = () => {
     )
 }
 
-export default CommunityHome
+export default CommunitiesHome

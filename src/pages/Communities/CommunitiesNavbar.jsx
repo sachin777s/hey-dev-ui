@@ -20,7 +20,7 @@ const CommunitiesNavbar = () => {
         <div>
           <BsSearch onClick={onOpen} />
           <Modal
-            className='absolute'
+            className='absolute bg-white dark:bg-black'
             placement='top'
             isOpen={isOpen}
             onOpenChange={onOpenChange}

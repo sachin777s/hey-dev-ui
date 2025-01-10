@@ -14,8 +14,8 @@ const Members = () => {
 
   return (
     <>
-      <div className="py-8 w-full flex items-center justify-center">
-        <div className='max-w-[450px] w-[90%] relative'>
+      <div className="w-full flex items-center justify-center">
+        <div className='max-w-[450px] py-2 w-[90%] relative'>
           <input
             className='w-full pl-4 pr-10 py-2 rounded-full outline-none border-[0.5px] border-color'
             onChange={handleInputChange}

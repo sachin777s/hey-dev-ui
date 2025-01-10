@@ -1,5 +1,5 @@
 import React from 'react'
-import CommunitiesNavbar from './components/CommunitiesNavbar'
+import CommunitiesNavbar from './CommunitiesNavbar'
 import { Outlet } from 'react-router-dom'
 
 const Communities = () => {
