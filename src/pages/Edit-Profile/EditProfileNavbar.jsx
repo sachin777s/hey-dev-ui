@@ -6,10 +6,10 @@ function EditProfileNavbar() {
   return (
     <Navbar
       isBordered
-      className="border-b[0.5px] border-[var(--primary-border)]"
+      className="pl-8 sm:pl-0 border-b[0.5px] border-[var(--primary-border)]"
     >
       <div className="flex items-center">
-        <BsDot /> <h1 className="text-xl font-semibold">Edit Profile</h1>
+        <h1 className="text-xl font-semibold">Edit Profile</h1>
       </div>
     </Navbar>
   );

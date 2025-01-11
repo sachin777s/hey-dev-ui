@@ -4,9 +4,9 @@ import { BsDot } from "react-icons/bs";
 
 function CreateCompanyNavbar() {
   return (
-    <Navbar isBordered>
+    <Navbar isBordered className="pl-8 sm:pl-0">
       <div className="flex items-center">
-        <BsDot /> <h1 className="text-xl font-semibold">Create Company Page</h1>
+        <h1 className="text-xl font-semibold">Create Company Page</h1>
       </div>
     </Navbar>
   );

@@ -11,12 +11,12 @@ const CommunitiesNavbar = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <Navbar isBordered>
+    <Navbar isBordered className='pl-8 sm:pl-0'>
       <div className='flex items-center'>
-        <BsDot /> <h1 className='text-xl font-semibold'>Communities</h1>
+        <h1 className='text-xl font-semibold'>Communities</h1>
       </div>
       <div className='flex items-center justify- gap-2'>
-        {/* Search Modal */}
+        {/* Search Modal */}<BsDot />
         <div>
           <BsSearch onClick={onOpen} />
           <Modal
