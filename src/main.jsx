@@ -33,6 +33,7 @@ import ApplicantsPage from "./pages/Company/components/ApplicantsPage.jsx";
 import AboutPage from "./pages/Company/components/AboutPage.jsx";
 import CommunityPosts from "./pages/Communities/components/SingleCommunity/CommunityPosts.jsx";
 import AboutCommunity from "./pages/Communities/components/SingleCommunity/AboutCommunity.jsx";
+import SinglePostPage from "./pages/SinglePostPage/SinglePostPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "post/:id",
+        element: <SinglePostPage />,
       },
       {
         path: "/explore",
