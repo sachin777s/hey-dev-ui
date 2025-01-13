@@ -7,7 +7,7 @@ import { IoMdVideocam } from "react-icons/io";
 import EmojiPicker from "emoji-picker-react";
 import { BsDot, BsEmojiSmile } from "react-icons/bs";
 
-function CreateReplyModal({ setIsOpen }) {
+function CreateReplyModal({ setIsOpen, otherUser, post }) {
   const modalRef = useRef(null);
 
   const [text, setText] = useState("");
