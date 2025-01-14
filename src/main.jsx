@@ -34,6 +34,7 @@ import AboutPage from "./pages/Company/components/AboutPage.jsx";
 import CommunityPosts from "./pages/Communities/components/SingleCommunity/CommunityPosts.jsx";
 import AboutCommunity from "./pages/Communities/components/SingleCommunity/AboutCommunity.jsx";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage.jsx";
+import { ClerkProvider } from "@clerk/clerk-react";
 
 const router = createBrowserRouter([
   {
@@ -176,10 +177,19 @@ const router = createBrowserRouter([
   },
 ]);
 
+// Import your Publishable Key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <NextUIProvider>
-      <RouterProvider router={router} />
-    </NextUIProvider>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <NextUIProvider>
+        <RouterProvider router={router} />
+      </NextUIProvider>
+    </ClerkProvider>
   </StrictMode>
 );
