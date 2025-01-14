@@ -70,10 +70,10 @@ function CreateReplyModal({ setIsOpen, otherUser, post }) {
         ref={modalRef}
         className="px-2 sm:px-4 py-4 max-w-[700px] max-h-[70%] border border-color rounded-lg bg-white dark:bg-black"
       >
-        <div className="flex items-start gap-2">
+        <div className="relative flex items-start gap-2">
           <div className="flex flex-col items-center">
             <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" />
-            <div className="h-full w-[1px] bg-white"></div>
+            <div className="absolute top-11 h-[calc(100%-45px)] w-[1px] bg-black dark:bg-white"></div>
           </div>
           <div className="flex items-start gap-1 flex-col">
             <div className="flex items-center">
@@ -95,7 +95,7 @@ function CreateReplyModal({ setIsOpen, otherUser, post }) {
               )}
               ......
             </p>
-            <div className="flex items-center gap-1">
+            <div className="mt-2 flex items-center gap-1">
               <span className="text-sm opacity-70">Replying to</span>
               <span className="text-blue-700">@sachin777s</span>
             </div>

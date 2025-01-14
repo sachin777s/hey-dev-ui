@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import SinglePost from "../../../components/SinglePost";
-import { Avatar, Button, useDisclosure } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import CreateReplyModal from "./CreateReplyModal";
 
 function Replies() {
-  // const { isOpen, onOpenChange, onOpen } = useDisclosure();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
