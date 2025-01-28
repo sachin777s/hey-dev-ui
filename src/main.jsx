@@ -35,6 +35,7 @@ import CommunityPosts from "./pages/Communities/components/SingleCommunity/Commu
 import AboutCommunity from "./pages/Communities/components/SingleCommunity/AboutCommunity.jsx";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage.jsx";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { dark } from "@clerk/themes";
 
 const router = createBrowserRouter([
   {
@@ -186,7 +187,11 @@ if (!PUBLISHABLE_KEY) {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider
+      appearance={{ baseTheme: dark }}
+      publishableKey={PUBLISHABLE_KEY}
+      afterSignOutUrl="/"
+    >
       <NextUIProvider>
         <RouterProvider router={router} />
       </NextUIProvider>

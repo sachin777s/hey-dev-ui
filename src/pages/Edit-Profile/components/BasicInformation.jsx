@@ -4,8 +4,6 @@ import { Form } from "@nextui-org/form";
 
 function BasicInformation() {
   const [user, setUser] = useState({
-    fullname: "",
-    username: "",
     headline: "",
     description: "",
   });
@@ -22,43 +20,12 @@ function BasicInformation() {
 
   return (
     <div className="mt-4">
-      <h1 className="text-2xl font-semibold">Basic Information</h1>
+      <h1 className="text-2xl font-semibold">About</h1>
       <Form
         validationBehavior="native"
         onSubmit={submitHandler}
         className="mt-4 w-full flex flex-col gap-8"
       >
-        <Input
-          required
-          label="Name"
-          labelPlacement="outside"
-          name="fullname"
-          placeholder="Enter your full name..."
-          type="text"
-          onChange={handleInputChange}
-          value={user.fullname}
-        />
-        <Input
-          required
-          label="Username"
-          labelPlacement="outside"
-          name="username"
-          placeholder="Enter your username..."
-          type="text"
-          onChange={handleInputChange}
-          value={user.username}
-        />
-        <Input
-          isDisabled
-          required
-          label="Email"
-          labelPlacement="outside"
-          name="email"
-          placeholder="Enter your email..."
-          type="email"
-          onChange={handleInputChange}
-          value={"john@gmail.com"}
-        />
         <Input
           label="Headline"
           labelPlacement="outside"

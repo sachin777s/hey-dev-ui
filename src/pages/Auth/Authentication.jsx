@@ -54,7 +54,7 @@ function Authentication() {
         </p>
         <div className="flex flex-col gap-4">
           <SignedOut>
-            <SignInButton>
+            <SignInButton mode="modal">
               <Button className="w-full bg-[var(--main-color)] text-black">
                 <IoLogInOutline />
                 Login
