@@ -7,12 +7,16 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
+  useAuth,
   UserButton,
 } from "@clerk/clerk-react";
+import { Navigate } from "react-router-dom";
 
 function Authentication() {
   const [vantaEffect, setVantaEffect] = useState(null);
   const myRef = useRef(null);
+  const { isSignedIn } = useAuth();
+
   useEffect(() => {
     if (!vantaEffect) {
       setVantaEffect(
@@ -34,6 +38,10 @@ function Authentication() {
       if (vantaEffect) vantaEffect.destroy();
     };
   }, [vantaEffect]);
+
+  if (isSignedIn) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <main

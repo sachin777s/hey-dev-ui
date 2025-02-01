@@ -1,7 +1,7 @@
-import React from 'react'
-import ProfileNavbar from './ProfileNavbar'
-import TabSection from './components/TabSection'
-import ProfileInfo from './components/ProfileInfo'
+import React from "react";
+import ProfileNavbar from "./ProfileNavbar";
+import TabSection from "./components/TabSection";
+import ProfileInfo from "./components/ProfileInfo";
 
 const Profile = () => {
 
@@ -13,7 +13,7 @@ const Profile = () => {
         <TabSection />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

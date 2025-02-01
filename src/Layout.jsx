@@ -1,38 +1,51 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import RightSidebar from "./components/RightSidebar";
 import { useEffect, useState } from "react";
 import Authentication from "./pages/Auth/Authentication";
 import { useAuth, useSignIn, useUser } from "@clerk/clerk-react";
+import API from "./api";
+import { useDispatch } from "react-redux";
+import {
+  fetchUserFailed,
+  fetchUserStart,
+  fetchUserSuccess,
+} from "./app/slices/user";
 
 export default function Layout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const { isLoaded, signIn } = useSignIn();
-  const { getToken, isSignedIn } = useAuth();
-  const [token, setToken] = useState();
+  const dispatch = useDispatch();
+
+  const { isSignedIn } = useAuth();
+
+  if (!isSignedIn) {
+    return <Navigate to={"/authentication"} />;
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const token = await getToken();
-      console.log(token);
-      setToken(token);
+    const fetchUserData = async () => {
+      try {
+        dispatch(fetchUserStart());
+        const response = await API.get("/api/user/profile");
+        console.log(response.data.data);
+        dispatch(fetchUserSuccess(response.data.data));
+      } catch (error) {
+        console.log(error);
+        dispatch(fetchUserFailed());
+      }
     };
+    fetchUserData();
   }, []);
 
   return (
     <>
-      {isSignedIn ? (
-        <div className="mx-auto max-w-[1340px] flex justify-center items-start flex-row relative">
-          <Sidebar />
-          <main className="w-full min-h-screen lg:w-[60%] z-0">
-            <Outlet />
-          </main>
-          <RightSidebar />
-        </div>
-      ) : (
-        <Authentication />
-      )}
+      <div className="mx-auto max-w-[1340px] flex justify-center items-start flex-row relative">
+        <Sidebar />
+        <main className="w-full min-h-screen lg:w-[60%] z-0">
+          <Outlet />
+        </main>
+        <RightSidebar />
+      </div>
     </>
   );
 }

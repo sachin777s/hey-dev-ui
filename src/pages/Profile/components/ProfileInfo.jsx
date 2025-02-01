@@ -6,15 +6,18 @@ import {
   DropdownTrigger,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FollowersFollowingsModal from "./FollowersFollowingsModal";
+import API from "../../../api";
+import { useSelector } from "react-redux";
 
 const ProfileInfo = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isFollowersModal, setIsFollowersModal] = useState();
+  const user = useSelector((state) => state.user.data);
 
   return (
     <div>
@@ -36,11 +39,11 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mt-6 flex items-center justify-center">
-        <div className="h-36 md:h-44 w-36 md:w-44 rounded-full border-2 border-[var(--main-color)]">
-          {false ? (
+        <div className="p-1 h-36 md:h-44 w-36 md:w-44 rounded-full border-4 border-[var(--main-color)]">
+          {user.profilePicture ? (
             <img
               className="w-full h-full rounded-full"
-              src="https://pbs.twimg.com/profile_images/1847175865597112320/C0DbR5kX_400x400.jpg"
+              src={user.profilePicture}
               alt="..."
             />
           ) : (
@@ -50,21 +53,26 @@ const ProfileInfo = () => {
       </div>
       <div className="flex items-center flex-col">
         <div className="mt-2 flex flex-col">
-          <span className="text-2xl font-bold">{"Sachin Kumar"}</span>
-          <span className="opacity-70 text-center">@{"sachin777s"}</span>
+          <span className="text-2xl font-bold">{user.fullName}</span>
+          <span className="opacity-70 text-center">@{user.username}</span>
         </div>
-        <div className="mt-2 text-xl">
-          <span>Full Stack Engineer | Creator</span>
-        </div>
+        {user.headline && (
+          <div className="mt-2 text-xl">
+            <span>{user.headline}</span>
+          </div>
+        )}
         <div className="mt-2 flex items-center gap-4">
           <Button
             className="text-base"
             radius="full"
             size="sm"
             variant="bordered"
-            onPress={()=>{setIsFollowersModal(true);onOpen()}}
+            onPress={() => {
+              setIsFollowersModal(true);
+              onOpen();
+            }}
           >
-            <span>1.8K</span>
+            <span>{user.followers?.length}</span>
             <span className="opacity-70">Followers</span>
           </Button>
           <Button
@@ -72,9 +80,12 @@ const ProfileInfo = () => {
             radius="full"
             size="sm"
             variant="bordered"
-            onPress={()=>{setIsFollowersModal(false);onOpen()}}
+            onPress={() => {
+              setIsFollowersModal(false);
+              onOpen();
+            }}
           >
-            <span>89</span>
+            <span>{user.followings?.length}</span>
             <span className="opacity-70">Followings</span>
           </Button>
           <FollowersFollowingsModal
