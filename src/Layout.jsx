@@ -12,6 +12,7 @@ import {
   fetchUserStart,
   fetchUserSuccess,
 } from "./app/slices/user";
+import { Toaster } from "react-hot-toast";
 
 export default function Layout() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function Layout() {
 
   return (
     <>
+      <Toaster />
       <div className="mx-auto max-w-[1340px] flex justify-center items-start flex-row relative">
         <Sidebar />
         <main className="w-full min-h-screen lg:w-[60%] z-0">
