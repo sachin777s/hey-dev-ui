@@ -28,7 +28,14 @@ function Education() {
     toast.promise(
       async () => {
         const response = await API.put("/api/user/profile/education", {
-          education: [...user.education, education],
+          education: [
+            ...user.education,
+            {
+              collegeName: education.collegeName,
+              course: education.course,
+              completedIn: Number(education.completedIn),
+            },
+          ],
         });
         dispatch(fetchUserSuccess(response.data.data));
         setEducation((prev) => {
