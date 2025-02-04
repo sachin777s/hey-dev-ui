@@ -1,14 +1,21 @@
 import { Form } from "@nextui-org/form";
 import { Button, Input } from "@nextui-org/react";
 import React, { useState } from "react";
+import { URL_REGEX } from "../../../utils/contants";
+import toast from "react-hot-toast";
+import API from "../../../api";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserSuccess } from "../../../app/slices/user";
 
 function SocialLinks() {
+  const defaultLinks = useSelector((state) => state.user.data.socialLinks);
   const [socialLinks, setSocialLinks] = useState({
-    github: "",
-    linkedin: "",
-    twitter: "",
-    instagram: "",
+    github: defaultLinks.github,
+    linkedin: defaultLinks.linkedin,
+    twitter: defaultLinks.twitter,
+    instagram: defaultLinks.instagram,
   });
+  const dispatch = useDispatch();
 
   // Handling Input value changes
   const handleInputChange = (e) => {
@@ -20,6 +27,28 @@ function SocialLinks() {
   // Submitting the form
   const submitHandler = (e) => {
     e.preventDefault();
+    if (
+      (socialLinks.github && !URL_REGEX.test(socialLinks.github)) ||
+      (socialLinks.linkedin && !URL_REGEX.test(socialLinks.linkedin)) ||
+      (socialLinks.twitter && !URL_REGEX.test(socialLinks.twitter)) ||
+      (socialLinks.instagram && !URL_REGEX.test(socialLinks.instagram))
+    ) {
+      return toast.error("Invalid URL");
+    }
+
+    toast.promise(
+      async () => {
+        const response = await API.put("/api/user/profile/social-links", {
+          socialLinks,
+        });
+        dispatch(fetchUserSuccess(response.data.data));
+      },
+      {
+        loading: "Updating Social Links",
+        success: "Social Links Updated Successfully",
+        error: "Failed to update social links",
+      }
+    );
   };
 
   return (
@@ -31,12 +60,11 @@ function SocialLinks() {
         onSubmit={submitHandler}
       >
         <Input
-          required
           label="Github"
           labelPlacement="outside"
           name="github"
           placeholder="Enter Github URL..."
-          type="url"
+          type="text"
           value={socialLinks.github}
           onChange={handleInputChange}
         />
@@ -45,7 +73,7 @@ function SocialLinks() {
           labelPlacement="outside"
           name="linkedin"
           placeholder="Enter Linkedin URL..."
-          type="url"
+          type="text"
           value={socialLinks.linkedin}
           onChange={handleInputChange}
         />
@@ -54,7 +82,7 @@ function SocialLinks() {
           labelPlacement="outside"
           name="twitter"
           placeholder="Enter Twitter URL..."
-          type="url"
+          type="text"
           value={socialLinks.twitter}
           onChange={handleInputChange}
         />
@@ -63,7 +91,7 @@ function SocialLinks() {
           labelPlacement="outside"
           name="instagram"
           placeholder="Enter Instagram URL..."
-          type="url"
+          type="text"
           value={socialLinks.instagram}
           onChange={handleInputChange}
         />

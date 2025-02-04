@@ -9,6 +9,7 @@ import ImageCropper from "../../../components/assets/ImageCropper";
 import toast from "react-hot-toast";
 import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
 import { fetchUserSuccess } from "../../../app/slices/user";
+import { PROFILE_PICTURES_FOLDER } from "../../../utils/contants";
 
 function UpdatePicture() {
   const [seledctedPicture, setSelectedPicture] = useState(null);
@@ -22,7 +23,10 @@ function UpdatePicture() {
       const updateProfilePicture = async () => {
         toast.promise(
           async () => {
-            const uploadedURL = await uploadFileToCloudinary(croppedPicture);
+            const uploadedURL = await uploadFileToCloudinary(
+              croppedPicture,
+              PROFILE_PICTURES_FOLDER
+            );
             if (!uploadedURL) {
             }
             const response = await API.put(

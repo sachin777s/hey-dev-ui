@@ -17,6 +17,7 @@
     "@internationalized/date": "^3.6.0",
     "@nextui-org/form": "^2.1.8",
     "@nextui-org/react": "^2.4.8",
+    "@react-pdf/renderer": "^4.1.6",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
     "emoji-picker-react": "^4.12.0",
