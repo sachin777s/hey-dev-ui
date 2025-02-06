@@ -5,13 +5,24 @@ import { IoMdVideocam } from "react-icons/io";
 import { FaImage, FaLocationDot } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { ImCross } from "react-icons/im";
+import { useSelector } from "react-redux";
+import API from "../../../api";
+import toast from "react-hot-toast";
+import {
+  POST_IMAGES_FOLDER,
+  POST_VIDEOS_FOLDER,
+} from "../../../utils/contants";
+import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
+import axios from "axios";
 
 const CreatePost = () => {
+  const user = useSelector((state) => state.user.data);
+
   const [heading, setHeading] = useState("");
   const [text, setText] = useState("");
   const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [file, setFile] = useState({ type: "", data: null });
+  const [acceptFileType, setAcceptFileType] = useState("");
   const pickerRef = useRef(null);
 
   // Hiding Emoji Picker onClick Outside
@@ -34,25 +45,51 @@ const CreatePost = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        if (file.type.startsWith("image")) {
-          setSelectedImage(reader.result);
-          setSelectedVideo(null);
-        } else {
-          setSelectedVideo(reader.result);
-          setSelectedImage(null);
-        }
+        setFile({
+          type: file.type.startsWith("image") ? "image" : "video",
+          data: reader.result,
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
   //Handling uploading post
-  const handleUploadPost = () => {};
+  const handleUploadPost = async () => {
+    let media;
+
+    toast.promise(
+      async () => {
+        if (file.data) {
+          const url = await uploadFileToCloudinary(
+            file.data,
+            file.type === "image" ? POST_IMAGES_FOLDER : POST_VIDEOS_FOLDER
+          );
+          media = {
+            type: file.type,
+            url,
+          };
+        }
+
+        const response = await API.post("/api/post", {
+          heading,
+          text,
+          media,
+        });
+        console.log(response.data);
+      },
+      {
+        loading: "Uploading Post",
+        success: "Post Uploaded Successfully",
+        error: "Failed to upload post",
+      }
+    );
+  };
 
   return (
     <div className="mt-4 px-2 sm:px-4 flex items-start gap-4">
       <div>
-        <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+        <Avatar src={user.profilePicture} />
       </div>
       <div className="w-full">
         <div>
@@ -62,7 +99,7 @@ const CreatePost = () => {
             placeholder="Heading..."
             value={heading}
             onChange={(e) => setHeading(e.target.value)}
-            maxLength={500}
+            maxLength={100}
           />
           <textarea
             maxLength={1000}
@@ -76,68 +113,82 @@ const CreatePost = () => {
         </div>
 
         <div className="w-full">
-          {selectedImage && (
-            <div className="relative">
-              <div className="w-[32px] h-[32px] p-2 bg-black text-white rounded-full absolute top-4 right-4 font-bold">
-                <ImCross onClick={() => setSelectedImage(null)} />
-              </div>
-              <img
-                src={selectedImage}
-                alt="Selected"
-                className="mx-auto max-w-full max-h-96 rounded-2xl"
-              />
-            </div>
-          )}
-          {selectedVideo && (
-            <div className="w-full relative">
-              <div className="w-[32px] h-[32px] p-2 bg-black text-white rounded-full absolute top-4 right-4 font-bold">
-                <ImCross onClick={() => setSelectedVideo(null)} />
-              </div>
-              <video controls autoPlay className="w-full">
-                <source src={selectedVideo} type="video/mp4" />
-              </video>
-            </div>
+          {file.data && (
+            <>
+              {file.type === "image" ? (
+                <div className="relative">
+                  <div className="w-[32px] h-[32px] p-2 bg-black text-white rounded-full absolute top-4 right-4 font-bold">
+                    <ImCross
+                      onClick={() => setFile({ data: null, type: "" })}
+                    />
+                  </div>
+                  <img
+                    src={file.data}
+                    alt="Selected"
+                    className="mx-auto max-w-full max-h-96 rounded-2xl"
+                  />
+                </div>
+              ) : (
+                <div className="w-full relative">
+                  <div
+                    onClick={() => {
+                      setFile({ data: null, type: "" });
+                      console.log("Video closed");
+                    }}
+                    className="w-[32px] h-[32px] p-2 bg-black text-white rounded-full absolute top-4 right-4 font-bold z-[999]"
+                  >
+                    <ImCross className="cursor-pointer" />
+                  </div>
+                  <video controls autoPlay className="w-full">
+                    <source src={file.data} type="video/mp4" />
+                  </video>
+                </div>
+              )}
+            </>
           )}
         </div>
 
         <div className="mt-1 flex items-center justify-between text-[var(--main-color)]">
           <div className="flex items-center justify-start gap-4">
             <div>
-              <label htmlFor="image-upload">
+              <label
+                onClick={() => setAcceptFileType("image/*")}
+                htmlFor="file-upload"
+              >
                 <FaImage size={20} />
               </label>
               <input
                 onChange={handleFileChange}
-                id="image-upload"
-                name="image-upload"
+                id="file-upload"
+                name="file-upload"
                 type="file"
-                accept="image/*"
+                accept={acceptFileType}
                 className="hidden"
               />
             </div>
             <div>
-              <label htmlFor="video-upload">
-                <IoMdVideocam size={20} />
+              <label htmlFor="file-upload">
+                <IoMdVideocam
+                  onClick={() => setAcceptFileType("video/*")}
+                  size={20}
+                />
               </label>
-              <input
-                onChange={handleFileChange}
-                id="video-upload"
-                name="video-upload"
-                type="file"
-                accept="video/*"
-                className="hidden"
-              />
             </div>
             <div className="flex relative">
               <div
                 ref={pickerRef}
                 className={`${
                   isEmojiPickerVisible ? "block" : "hidden"
-                } absolute top-6 left-0 z-10 -translate-x-1/3 md:translate-x-0`}
+                } absolute top-6 left-0 -translate-x-1/3 md:translate-x-0 z-50`}
               >
                 <EmojiPicker
+                  theme={
+                    localStorage.getItem("theme")
+                      ? localStorage.getItem("theme")
+                      : "dark"
+                  }
                   onEmojiClick={(emoji) =>
-                    setPostInput((prev) => prev + emoji.emoji)
+                    setText((prev) => prev + emoji.emoji)
                   }
                 />
               </div>
