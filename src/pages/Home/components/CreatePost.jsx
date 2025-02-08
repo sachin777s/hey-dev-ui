@@ -5,7 +5,7 @@ import { IoMdVideocam } from "react-icons/io";
 import { FaImage, FaLocationDot } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { ImCross } from "react-icons/im";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../../../api";
 import toast from "react-hot-toast";
 import {
@@ -13,7 +13,7 @@ import {
   POST_VIDEOS_FOLDER,
 } from "../../../utils/contants";
 import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
-import axios from "axios";
+import { addUploadedPost } from "../../../app/slices/posts";
 
 const CreatePost = () => {
   const user = useSelector((state) => state.user.data);
@@ -24,6 +24,8 @@ const CreatePost = () => {
   const [file, setFile] = useState({ type: "", data: null });
   const [acceptFileType, setAcceptFileType] = useState("");
   const pickerRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   // Hiding Emoji Picker onClick Outside
   useEffect(() => {
@@ -76,7 +78,10 @@ const CreatePost = () => {
           text,
           media,
         });
-        console.log(response.data);
+        dispatch(addUploadedPost(response.data.data));
+        setHeading("");
+        setText("");
+        setFile({ data: null, type: "" });
       },
       {
         loading: "Uploading Post",

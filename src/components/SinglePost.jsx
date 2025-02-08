@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Image,
+  Spinner,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -13,12 +14,25 @@ import { IoIosStats } from "react-icons/io";
 import CreateReplyModal from "../pages/SinglePostPage/components/CreateReplyModal";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
+import API from "../api";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost } from "../app/slices/posts";
+import { timeAgo } from "../utils/timeAgo";
+import toast from "react-hot-toast";
+import { removePost } from "../app/slices/posts";
 
 const SinglePost = ({ post, user, isReplyHierarchy }) => {
+  const currentUserId = useSelector((state) => state.user.data._id); // logged in user id
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageOpen, setImageOpen] = useState(false);
   const videoRef = useRef(null);
   const [aspectRatio, setAspectRatio] = useState(1.1);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [viewed, setViewed] = useState(false);
+  const [isPostLinkCopied, setIsPostLinkCopied] = useState(false);
+
+  const dispatch = useDispatch();
 
   // Converting text string into links added string
   const navigate = useNavigate();
@@ -64,6 +78,51 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
     }
   }, []);
 
+  // Like or Deslike the post
+  const likePost = async () => {
+    try {
+      setIsLikeLoading(true);
+      const response = await API.put(`/api/post/${post._id}/like`);
+      console.log(response.data);
+      dispatch(updatePost(response.data.data.post));
+      setIsLikeLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLikeLoading(false);
+    }
+  };
+
+  // Deleting existing the post
+  const handleDeletePost = () => {
+    toast.promise(
+      async () => {
+        const response = await API.delete(`/api/post/${post._id}`);
+        console.log(response.data);
+        dispatch(removePost(post));
+      },
+      {
+        loading: "Deleting the post",
+        success: "Post Deleted Successfully",
+        error: "Failed to deletd post",
+      }
+    );
+  };
+
+  // Following post's user
+  const handleFollowUser = () => {};
+
+  const handleCopyPostLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`https://locahost:5173/post/${post._id}`);
+      setIsPostLinkCopied(true);
+
+      // Reset "Copied!" message after 3 seconds
+      setTimeout(() => setIsPostLinkCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
   return (
     <div
       className={`relative py-6 w-full flex flex-shrink items-start gap-2 ${
@@ -71,7 +130,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
       }`}
     >
       <Link to={`/profile`} className="block">
-        <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+        <Avatar src={user.profilePicture} />
         {isReplyHierarchy && (
           <div className="absolute left-[18px] w-[1px] h-[calc(100%-45px)] bg-black dark:bg-white"></div>
         )}
@@ -80,14 +139,14 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <Link to={`/profile`} className="font-semibold">
-              {"Sachin Kumar"}
+              {user.fullName}
             </Link>
             <div className="flex items-center">
               <Link to={`/profile`} className="opacity-70 hover:underline">
-                {"@sachin777sk"}
+                {user.username}
               </Link>
               <BsDot />
-              <span className="opacity-70">Oct 12</span>
+              <span className="opacity-70">{timeAgo(post.createdAt)}</span>
             </div>
           </div>
           <Dropdown placement="bottom-end">
@@ -97,10 +156,16 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
               </div>
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem key="settings">Copy Link</DropdownItem>
-              {true && <DropdownItem key="settings">Delete Post</DropdownItem>}
-              {true && (
-                <DropdownItem key="settings">
+              <DropdownItem onClick={handleCopyPostLink} key="settings">
+                {isPostLinkCopied ? "Copied" : "Copy Link"}
+              </DropdownItem>
+              {currentUserId === user._id && (
+                <DropdownItem onClick={handleDeletePost} key="settings">
+                  Delete Post
+                </DropdownItem>
+              )}
+              {currentUserId !== user._id && (
+                <DropdownItem onClick={handleFollowUser} key="settings">
                   Follow {"sachin777sk"}
                 </DropdownItem>
               )}
@@ -111,23 +176,21 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
           onClick={() => navigate(`/post/${9977}`)}
           className="mt-1 cursor-pointer"
         >
-          <h1 className="text-lg font-semibold">{"This is heading"}</h1>
-          <p className="mt-1">
-            {convertUrlsToLinks(
-              "Check out my repos at github.com/sachin777sk and www.github.com/sachin777sk. You can also visit https://github.com/sachin777sk for more projects!"
-            )}
-          </p>
+          <h1 className="text-lg font-semibold">{post.heading}</h1>
+          <p className="mt-1">{convertUrlsToLinks(post.text)}</p>
         </div>
-        {true &&
-          (true ? (
+        {post.media &&
+          (post.media.type === "image" ? (
             <>
-              <Image
-                onClick={() => setImageOpen(true)}
-                isBlurred
-                alt="NextUI Album Cover"
-                className="mt-6 max-h-[600px] max-w-full"
-                src="https://cdn.pixabay.com/photo/2024/02/28/15/14/ai-generated-8602228_640.jpg"
-              />
+              <div className="flex justify-center">
+                <Image
+                  onClick={() => setImageOpen(true)}
+                  isBlurred
+                  alt="NextUI Album Cover"
+                  className="mt-6 max-h-[600px] max-w-full"
+                  src={post.media.url}
+                />
+              </div>
               {isImageOpen &&
                 ReactDOM.createPortal(
                   <div className="w-full h-screen fixed top-0 left-0 inset-0 flex items-center justify-center backdrop-brightness-[0.1] z-[999]">
@@ -137,7 +200,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
                     />
                     <img
                       className="min-w-[360px] max-w-screen max-h-screen"
-                      src="https://cdn.pixabay.com/photo/2024/05/15/20/57/developer-8764523_640.jpg"
+                      src={post.media.url}
                       alt=""
                     />
                   </div>,
@@ -156,8 +219,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
                 autoPlay={true}
                 controls={true}
                 loop
-                // src="https://videos.pexels.com/video-files/853986/853986-sd_640_360_25fps.mp4"
-                src="https://cdn.pixabay.com/video/2024/12/26/248879_tiny.mp4"
+                src={post.media.url}
               ></video>
             </div>
           ))}
@@ -176,10 +238,20 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
               />
             )}
           </div>
-
-          <div className="flex items-center gap-1 cursor-pointer hover:text-[var(--main-color)]">
-            <BsHeart size={16} />
-            <span className="text-sm">12K</span>
+          <div
+            onClick={likePost}
+            className={`w-[42px] flex items-center gap-1 cursor-pointer ${
+              post.likes.includes(user._id) && "text-[var(--main-color)]"
+            } hover:text-[var(--main-color)]`}
+          >
+            {isLikeLoading ? (
+              <Spinner color="success" size="sm" />
+            ) : (
+              <>
+                <BsHeart size={16} />
+                <span className="text-sm">{post.likesCount}</span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-1 cursor-pointer hover:text-[var(--main-color)]">
             <IoIosStats size={16} />
