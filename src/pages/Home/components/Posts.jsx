@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import SinglePost from "../../../components/SinglePost";
 import API from "../../../api";
 import { useDispatch, useSelector } from "react-redux";
-import { loadPosts } from "../../../app/slices/posts";
+import { inceaseCurrentPage, loadPosts } from "../../../app/slices/posts";
 import { Spinner } from "@nextui-org/react";
 
 const Posts = () => {
-  const posts = useSelector((state) => state.posts.data);
+  const { posts, hasMore, currentPage } = useSelector(
+    (state) => state.posts.normalPosts
+  );
   const [isLoading, setIsLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Posts = () => {
         window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight
       ) {
-        setPageNumber((prevPage) => prevPage + 1);
+        dispatch(inceaseCurrentPage({ type: "normal" }));
       }
     };
 
@@ -36,18 +36,17 @@ const Posts = () => {
       try {
         setIsLoading(true);
         const response = await API.get(
-          `/api/post/?page=${pageNumber}&limit=3&type=latest`
+          `/api/post/?page=${currentPage}&limit=3&type=latest`
         );
         console.log(response.data);
-        dispatch(loadPosts(response.data.data));
-        setHasMore(response.data.data.length === 3);
+        dispatch(loadPosts({ type: "normal", posts: response.data.data }));
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
       }
     };
     fetchPosts();
-  }, [pageNumber]);
+  }, [currentPage]);
 
   return (
     <div className="px-2 sm:px-4">
