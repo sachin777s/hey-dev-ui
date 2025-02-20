@@ -20,6 +20,10 @@ import { updatePost } from "../app/slices/posts";
 import { timeAgo } from "../utils/timeAgo";
 import toast from "react-hot-toast";
 import { removePost } from "../app/slices/posts";
+import {
+  deleteCommunityPost,
+  updateCommunityPost,
+} from "../app/slices/community";
 
 const SinglePost = ({ post, user, isReplyHierarchy }) => {
   const currentUserId = useSelector((state) => state.user.data._id); // logged in user id
@@ -85,6 +89,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
       const response = await API.put(`/api/post/${post._id}/like`);
       console.log(response.data);
       dispatch(updatePost(response.data.data.post));
+      dispatch(updateCommunityPost(response.data.data.post));
       setIsLikeLoading(false);
     } catch (error) {
       console.log(error);
@@ -99,6 +104,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
         const response = await API.delete(`/api/post/${post._id}`);
         console.log(response.data);
         dispatch(removePost(post));
+        dispatch(deleteCommunityPost(post));
       },
       {
         loading: "Deleting the post",
@@ -113,7 +119,9 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
 
   const handleCopyPostLink = async () => {
     try {
-      await navigator.clipboard.writeText(`https://locahost:5173/post/${post._id}`);
+      await navigator.clipboard.writeText(
+        `https://locahost:5173/post/${post._id}`
+      );
       setIsPostLinkCopied(true);
 
       // Reset "Copied!" message after 3 seconds
@@ -241,7 +249,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
           <div
             onClick={likePost}
             className={`w-[42px] flex items-center gap-1 cursor-pointer ${
-              post.likes.includes(user._id) && "text-[var(--main-color)]"
+              post.likes.includes(currentUserId) && "text-[var(--main-color)]"
             } hover:text-[var(--main-color)]`}
           >
             {isLikeLoading ? (

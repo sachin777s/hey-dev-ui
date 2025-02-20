@@ -8,18 +8,26 @@ import {
   Textarea,
   Button,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UploadLogo from "../helpers/UploadLogo";
+import toast from "react-hot-toast";
+import { uploadFileToCloudinary } from "../../../../utils/uploadFileToCloudinary";
+import { COMMUNITY_LOGO } from "../../../../utils/contants";
+import API from "../../../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCommunity } from "../../../../app/slices/community";
 
 function EditCommunityModal({ isOpen, onOpenChange }) {
+  const currentCommunity = useSelector((state) => state.community.data);
+
   const [community, setCommunity] = useState({
-    name: "",
-    headline: "",
-    description: "",
-    avatar: "",
-    rules: [],
+    name: currentCommunity.name,
+    headline: currentCommunity.headline,
+    description: currentCommunity.description,
   });
-  const [logoImage, setLogoImage] = useState();
+  const [logoImage, setLogoImage] = useState(null);
+  const [rules, setRules] = useState(currentCommunity.rules);
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     setCommunity((prev) => {
@@ -27,35 +35,67 @@ function EditCommunityModal({ isOpen, onOpenChange }) {
     });
   };
 
-  const handleRulesInputChange = (event, index) => {
-    let tempArr = community.rules;
-    tempArr[index] = event.target.value;
-    setCommunity((prev) => {
-      return { ...prev, rules: tempArr };
-    });
-  };
-
   const filterRules = () => {
-    const filteredRules = community.rules.filter((rule) => rule != "");
-    setCommunity((prev) => {
-      return { ...prev, rules: filteredRules };
-    });
+    setRules((prev) => prev.filter((rule) => rule !== ""));
   };
 
-  // Handling upload logo
-  const uploadLogo = async () => {
-    if (!logoImage) return;
-  };
+  // Updating the logo image
+  useEffect(() => {
+    if (!logoImage) {
+      return;
+    }
+    const updateLogo = async () => {
+      toast.promise(
+        async () => {
+          const logoUrl = await uploadFileToCloudinary(
+            logoImage,
+            COMMUNITY_LOGO
+          );
+          const response = await API.put(
+            `/api/community/${currentCommunity._id}`,
+            {
+              logo: logoUrl,
+            }
+          );
+          console.log(response);
+          dispatch(fetchCommunity(response.data.data));
+          setLogoImage(null);
+        },
+        {
+          loading: "Community Logo is Updating",
+          success: "Logo is Updated Successfully",
+          error: "Failed to Update Logo",
+        }
+      );
+    };
+    updateLogo();
+  }, [logoImage]);
 
+  // Handling submit the form
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     filterRules();
-    await uploadLogo();
-    console.log(community);
+    console.log(rules);
+    toast.promise(
+      async () => {
+        const response = await API.put(
+          `/api/community/${currentCommunity._id}`,
+          { ...community, rules }
+        );
+        dispatch(fetchCommunity(response.data.data));
+      },
+      {
+        loading: "Community is updating",
+        success: "Community is updating",
+        error: "Failed to update community",
+      }
+    );
   };
 
   return (
     <Modal
+      isDismissable={false}
+      shouldCloseOnInteractOutside={false}
       scrollBehavior="inside"
       size="2xl"
       isOpen={isOpen}
@@ -101,6 +141,7 @@ function EditCommunityModal({ isOpen, onOpenChange }) {
                   placeholder="Write about community (maximum 500 characters allowed)"
                   name="description"
                   maxLength={500}
+                  minLength={100}
                   value={community.description}
                   onChange={handleInputChange}
                 />
@@ -117,27 +158,52 @@ function EditCommunityModal({ isOpen, onOpenChange }) {
                   <Input
                     placeholder="Rule No. 01"
                     type="text"
-                    onChange={(e) => handleRulesInputChange(e, 0)}
+                    value={rules[0]}
+                    onChange={(e) =>
+                      setRules((prev) =>
+                        prev.map((rule, i) => (i !== 0 ? rule : e.target.value))
+                      )
+                    }
                   />
                   <Input
                     placeholder="Rule No. 02"
                     type="text"
-                    onChange={(e) => handleRulesInputChange(e, 1)}
+                    value={rules[1]}
+                    onChange={(e) =>
+                      setRules((prev) =>
+                        prev.map((rule, i) => (i !== 1 ? rule : e.target.value))
+                      )
+                    }
                   />
                   <Input
                     placeholder="Rule No. 03"
                     type="text"
-                    onChange={(e) => handleRulesInputChange(e, 2)}
+                    value={rules[2]}
+                    onChange={(e) =>
+                      setRules((prev) =>
+                        prev.map((rule, i) => (i !== 2 ? rule : e.target.value))
+                      )
+                    }
                   />
                   <Input
                     placeholder="Rule No. 04"
                     type="text"
-                    onChange={(e) => handleRulesInputChange(e, 3)}
+                    value={rules[3]}
+                    onChange={(e) =>
+                      setRules((prev) =>
+                        prev.map((rule, i) => (i !== 3 ? rule : e.target.value))
+                      )
+                    }
                   />
                   <Input
                     placeholder="Rule No. 05"
                     type="text"
-                    onChange={(e) => handleRulesInputChange(e, 4)}
+                    value={rules[4]}
+                    onChange={(e) =>
+                      setRules((prev) =>
+                        prev.map((rule, i) => (i !== 4 ? rule : e.target.value))
+                      )
+                    }
                   />
                 </div>
                 <Button

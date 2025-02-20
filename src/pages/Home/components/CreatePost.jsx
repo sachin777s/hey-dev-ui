@@ -1,8 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Avatar, Button } from "@nextui-org/react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoMdVideocam } from "react-icons/io";
-import { FaImage, FaLocationDot } from "react-icons/fa6";
+import { FaImage, FaLocationDot, FaUsers } from "react-icons/fa6";
 import EmojiPicker from "emoji-picker-react";
 import { ImCross } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +21,8 @@ import {
 } from "../../../utils/contants";
 import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
 import { addUploadedPost } from "../../../app/slices/posts";
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { addUploadedCommunityPost } from "../../../app/slices/community";
 
 const CreatePost = () => {
   const user = useSelector((state) => state.user.data);
@@ -24,6 +33,16 @@ const CreatePost = () => {
   const [file, setFile] = useState({ type: "", data: null });
   const [acceptFileType, setAcceptFileType] = useState("");
   const pickerRef = useRef(null);
+  const [communities, setCommunities] = useState([]);
+  const [selectedCommunityId, setSelectedCommunityId] = useState(null);
+
+  const [selectedCommunities, setselectedCommunities] = useState(
+    new Set(["Your Account"])
+  );
+  const selectedCommunityName = useMemo(
+    () => Array.from(selectedCommunities).join(", ").replaceAll("_", " "),
+    [selectedCommunities]
+  );
 
   const dispatch = useDispatch();
 
@@ -38,6 +57,16 @@ const CreatePost = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  // Fetching user's owned and joined communites
+  useEffect(() => {
+    const fetchCommunities = async () => {
+      const response = await API.get("/api/user/profile/communities");
+      console.log(response.data.data);
+      setCommunities(response.data.data);
+    };
+    fetchCommunities();
   }, []);
 
   //Displaying Selected Image
@@ -77,8 +106,13 @@ const CreatePost = () => {
           heading,
           text,
           media,
+          community: selectedCommunityId,
         });
-        dispatch(addUploadedPost(response.data.data));
+        const post = response.data.data;
+        dispatch(addUploadedPost(post));
+        if (post.community !== null) {
+          dispatch(addUploadedCommunityPost(post));
+        }
         setHeading("");
         setText("");
         setFile({ data: null, type: "" });
@@ -98,6 +132,60 @@ const CreatePost = () => {
       </div>
       <div className="w-full">
         <div>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                size="sm"
+                variant="bordered"
+                radius="full"
+                className="capitalize text-base border-color"
+              >
+                {selectedCommunityName}
+                <RiArrowDropDownLine size={28} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Location Type"
+              variant="flat"
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={selectedCommunities}
+              onSelectionChange={setselectedCommunities}
+            >
+              <DropdownItem
+                onClick={() => setSelectedCommunityId(null)}
+                key="Your Account"
+              >
+                Your Account
+              </DropdownItem>
+              <DropdownItem isDisabled key="community">
+                <span className="text-lg">Communities</span>
+              </DropdownItem>
+              {communities.map((community, i) => (
+                <DropdownItem
+                  className="flex"
+                  value={"#23!FS3F3"}
+                  key={community.name}
+                  onClick={() => setSelectedCommunityId(community._id)}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {community.logo ? (
+                      <img
+                        className="h-[18px] rounded-sm"
+                        src={community.logo}
+                        alt="..."
+                      />
+                    ) : (
+                      <FaUsers />
+                    )}
+                    <span>{community.name}</span>
+                  </div>
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div className="mt-4">
           <input
             className="p-2 w-full rounded-lg outline-none border border-color bg-transparent"
             type="text"

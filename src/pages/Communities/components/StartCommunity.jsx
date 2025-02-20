@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "@nextui-org/form";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import UploadLogo from "./helpers/UploadLogo";
+import toast from "react-hot-toast";
+import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
+import { COMMUNITY_LOGO } from "../../../utils/contants";
+import API from "../../../api";
+import { useDispatch } from "react-redux";
+import { fetchCommunity } from "../../../app/slices/community";
+import { useNavigate } from "react-router-dom";
 
 const StartCommunity = () => {
   const [community, setCommunity] = useState({
     name: "",
     headline: "",
     description: "",
-    avatar: "",
+    logo: "",
     rules: [],
   });
-  const [logoImage, setLogoImage] = useState();
+  const [logoImage, setLogoImage] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setCommunity((prev) => {
@@ -34,14 +43,26 @@ const StartCommunity = () => {
     });
   };
 
-  // Handling upload logo
-  const uploadLogo = async () => {};
-
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     filterRules();
-    await uploadLogo();
-    console.log(community);
+    toast.promise(
+      async () => {
+        const url = await uploadFileToCloudinary(logoImage, COMMUNITY_LOGO);
+        const response = await API.post("/api/community", {
+          ...community,
+          logo: url,
+        });
+        console.log(response.data);
+        dispatch(fetchCommunity(response.data.data));
+        navigate(`/communities/${response.data.data._id}/posts`);
+      },
+      {
+        loading: "Creating Community",
+        success: "Community Created Successfully",
+        error: "Failed to Create Community",
+      }
+    );
   };
 
   return (

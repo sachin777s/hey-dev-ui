@@ -19,6 +19,12 @@ const initialState = {
     hasMore: true,
     isLoading: false,
   },
+  communityPosts: {
+    posts: [],
+    currentPage: 1,
+    hasMore: true,
+    isLoading: false,
+  },
 };
 
 const postsSlice = createSlice({
@@ -51,6 +57,14 @@ const postsSlice = createSlice({
         if (action.payload.posts.length < 3) {
           state.normalPosts.hasMore = false;
         }
+      } else if (action.payload.type === "community") {
+        state.communityPosts.posts = [
+          ...state.communityPosts.posts,
+          ...action.payload.posts,
+        ];
+        if (action.payload.posts.length < 3) {
+          state.communityPosts.hasMore = false;
+        }
       } else {
         return;
       }
@@ -64,6 +78,8 @@ const postsSlice = createSlice({
         state.likedPosts.currentPage += 1;
       } else if (action.payload.type === "normal") {
         state.normalPosts.currentPage += 1;
+      } else if (action.payload.type === "community") {
+        state.communityPosts.currentPage += 1;
       } else {
         return;
       }
@@ -83,6 +99,10 @@ const postsSlice = createSlice({
       state.ownedPosts.posts = state.ownedPosts.posts.map((post) =>
         postToUpdate._id === post._id ? postToUpdate : post
       );
+
+      state.communityPosts.posts = state.communityPosts.posts.map((post) =>
+        postToUpdate._id === post._id ? postToUpdate : post
+      );
     },
 
     // Removing Existing Single post
@@ -94,6 +114,9 @@ const postsSlice = createSlice({
         (post) => post._id !== action.payload._id
       );
       state.ownedPosts.posts = state.ownedPosts.posts.filter(
+        (post) => post._id !== action.payload._id
+      );
+      state.communityPosts.posts = state.communityPosts.posts.filter(
         (post) => post._id !== action.payload._id
       );
     },

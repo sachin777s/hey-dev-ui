@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "post/:id",
+        path: "post/:postId",
         element: <SinglePostPage />,
       },
       {
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
             element: <UserList />,
           },
           {
-            path: ":id",
+            path: ":userId",
             element: <MessageUser />,
           },
         ],
@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
             element: <CommunitiesHome />,
           },
           {
-            path: ":id",
+            path: ":communityId",
             element: <SingleCommunity />,
             children: [
               {
@@ -108,11 +108,11 @@ export const router = createBrowserRouter([
             element: <JobsHome />,
           },
           {
-            path: ":id",
+            path: ":jobId",
             element: <SingleJob />,
           },
           {
-            path: ":id/apply",
+            path: ":jobId/apply",
             element: <ApplyJob />,
           },
         ],
