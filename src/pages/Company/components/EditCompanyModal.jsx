@@ -7,24 +7,33 @@ import {
   Textarea,
   Button,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "react-router-dom";
 import LogoUpload from "../../Create-Company/components/LogoUpload";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadFileToCloudinary } from "../../../utils/uploadFileToCloudinary";
+import { COMPANY_LOGO_FOLDER } from "../../../utils/contants";
+import toast from "react-hot-toast";
+import API from "../../../api";
+import { loadCompany } from "../../../app/slices/company";
 
-function EditCompanyModal({ isOpen, onOpenChange }) {
+function EditCompanyModal({ isOpen, onOpenChange, onclose }) {
+  const currentCompany = useSelector((state) => state.company.data);
+
   const [company, setCompany] = useState({
-    name: "TCS Private Limited",
-    headline: "This is the headline for TCS",
-    description: "Here is description",
-    email: "tcs@business.com",
-    website: "https://tcs.com",
-    phone: "+91 999999999",
-    industry: "Artificial Intelligence",
-    size: "1000+",
-    foundedIn: new Date().getFullYear(),
-    logo: "",
+    name: currentCompany.name,
+    headline: currentCompany.headline,
+    description: currentCompany.description,
+    email: currentCompany.email,
+    website: currentCompany.website,
+    phone: currentCompany.phone,
+    industry: currentCompany.industry,
+    size: currentCompany.size,
+    foundedIn: currentCompany.foundedIn,
   });
   const [logoImage, setLogoImage] = useState();
+
+  const dispatch = useDispatch();
 
   // Handling Input Changes
   const handleInputChange = (e) => {
@@ -33,22 +42,56 @@ function EditCompanyModal({ isOpen, onOpenChange }) {
     });
   };
 
-  //Handling logo upload
-  const uploadLogo = async () => {};
+  useEffect(() => {
+    if (!logoImage) {
+      return;
+    }
+
+    toast.promise(
+      async () => {
+        const logoUrl = await uploadFileToCloudinary(
+          logoImage,
+          COMPANY_LOGO_FOLDER
+        );
+        const response = await API.put(`/api/company/${currentCompany._id}`, {
+          logo: logoUrl,
+        });
+        console.log(response.data);
+        dispatch(loadCompany(response.data.data));
+      },
+      {
+        loading: "Logo is Updating",
+        success: "Logo Updated Successfully",
+        error: "Failed to Update Logo",
+      }
+    );
+  }, [logoImage]);
 
   //Handling submit form
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (logoImage) {
-      await uploadLogo();
-      return;
-    }
-    // continue to write code
+    toast.promise(
+      async () => {
+        const response = await API.put(
+          `/api/company/${currentCompany._id}`,
+          company
+        );
+        console.log(response.data);
+        dispatch(loadCompany(response.data.data));
+        onclose();
+      },
+      {
+        loading: "Company is Updating",
+        success: "Company Updated Successfully",
+        error: "Failed to Update Company",
+      }
+    );
   };
 
   return (
     <>
       <Modal
+        isDismissable={false}
         scrollBehavior="inside"
         size="2xl"
         isOpen={isOpen}

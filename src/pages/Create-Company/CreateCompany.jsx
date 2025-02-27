@@ -3,6 +3,11 @@ import CreateCompanyNavbar from "./CreateCompanyNavbar";
 import { Form } from "@nextui-org/form";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import LogoUpload from "./components/LogoUpload";
+import API from "../../api";
+import toast from "react-hot-toast";
+import { uploadFileToCloudinary } from "../../utils/uploadFileToCloudinary";
+import { COMMUNITY_LOGO } from "../../utils/contants";
+import { useNavigate } from "react-router-dom";
 
 function CreateCompany() {
   const [company, setCompany] = useState({
@@ -18,6 +23,7 @@ function CreateCompany() {
     logo: "",
   });
   const [logoImage, setLogoImage] = useState();
+  const navigate = useNavigate();
 
   // Handling Input Changes
   const handleInputChange = (e) => {
@@ -27,12 +33,28 @@ function CreateCompany() {
   };
 
   //Handling submit form
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (!logoImage) {
       return; //return error
     }
-    // continue writing code
+
+    toast.promise(
+      async () => {
+        const logoUrl = await uploadFileToCloudinary(logoImage, COMMUNITY_LOGO);
+        const response = await API.post("/api/company", {
+          ...company,
+          logo: logoUrl,
+        });
+        console.log(response.data);
+        navigate(`/company/about`)
+      },
+      {
+        loading: "Creating Company",
+        success: "Company Created Successfullly",
+        error: "Failed to create Company",
+      }
+    );
   };
 
   return (

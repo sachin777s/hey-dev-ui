@@ -7,11 +7,15 @@ import {
   ModalHeader,
   Textarea,
   Button,
-  ModalFooter,
 } from "@nextui-org/react";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import API from "../../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { addCreatedJob } from "../../../app/slices/company";
 
-function CreateJobModal({ isOpen, onOpenChange }) {
+function CreateJobModal({ isOpen, onOpenChange, onClose }) {
+  const company = useSelector((state) => state.company.data);
   const [job, setJob] = useState({
     role: "",
     description: "",
@@ -27,6 +31,8 @@ function CreateJobModal({ isOpen, onOpenChange }) {
     openings: 0,
   });
 
+  const dispatch = useDispatch();
+
   //Handling Input Change
   const handleInputChange = (e) => {
     setJob((prev) => {
@@ -37,7 +43,40 @@ function CreateJobModal({ isOpen, onOpenChange }) {
   //Handling submit form
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(job);
+    const [year, month, day] = job.deadline.split("-");
+    const deadline = `${day}/${month}/${year}`;
+
+    toast.promise(
+      async () => {
+        const response = await API.post("/api/job", {
+          ...job,
+          company: company._id,
+          deadline,
+        });
+        console.log(response.job);
+        dispatch(addCreatedJob(response.data.data));
+        setJob({
+          role: "",
+          description: "",
+          skills: [],
+          experienceInYear: 0,
+          salary: {
+            minRange: 0,
+            maxRange: 0,
+          },
+          locationType: "Office",
+          location: "",
+          deadline: "",
+          openings: 0,
+        });
+        onClose();
+      },
+      {
+        loading: "Creating Job",
+        success: "Job Created Successfully",
+        error: "Failed to Create Job",
+      }
+    );
   };
 
   return (
@@ -76,6 +115,7 @@ function CreateJobModal({ isOpen, onOpenChange }) {
                   name="description"
                   value={job.description}
                   onChange={handleInputChange}
+                  maxLength={2000}
                 />
 
                 <Input
@@ -114,8 +154,7 @@ function CreateJobModal({ isOpen, onOpenChange }) {
                   <div className="flex items-center gap-2">
                     <Input
                       required
-                      placeholder="Minimum Range..."
-                      type="number"
+                      placeholder="Minimum (LPA)"
                       value={job.salary.minRange}
                       onChange={(e) =>
                         setJob((prev) => {
@@ -132,8 +171,7 @@ function CreateJobModal({ isOpen, onOpenChange }) {
                     />
                     <Input
                       required
-                      placeholder="Maximum Salary..."
-                      type="number"
+                      placeholder="Maximum (LPA)"
                       value={job.salary.maxRange}
                       onChange={(e) =>
                         setJob((prev) => {
@@ -152,7 +190,7 @@ function CreateJobModal({ isOpen, onOpenChange }) {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span>Location Type</span>
+                  <span className="text-sm">Location Type</span>
                   <select
                     required
                     name="locationType"
@@ -179,15 +217,18 @@ function CreateJobModal({ isOpen, onOpenChange }) {
                   />
                 )}
 
-                <input
-                  type="date"
-                  className="px-4 py-2 rounded-xl bg-[#EFEFEF] dark:bg-[#3F3F46]"
-                  onChange={(e) =>
-                    setJob((prev) => {
-                      return { ...prev, deadline: e.target.value };
-                    })
-                  }
-                />
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm">Deadline</span>
+                  <input
+                    type="date"
+                    className="px-4 py-2 rounded-xl bg-[#EFEFEF] dark:bg-[#3F3F46]"
+                    onChange={(e) =>
+                      setJob((prev) => {
+                        return { ...prev, deadline: e.target.value };
+                      })
+                    }
+                  />
+                </div>
 
                 <Input
                   required

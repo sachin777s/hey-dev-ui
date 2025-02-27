@@ -1,10 +1,20 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
+import ImageCropper from "../../../components/assets/ImageCropper";
 
-const LogoUpload = ({ setLogoImage }) => {
-  const [preview, setPreview] = useState(null);
+const UploadLogo = ({ setLogoImage }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
   const [error, setError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [isImageCropperOpen, setIsImageCropperOpen] = useState(false);
+
+  useEffect(() => {
+    if (croppedImage) {
+      setLogoImage(croppedImage);
+    }
+  }, [croppedImage]);
 
   const handleFile = (file) => {
     setError("");
@@ -22,12 +32,13 @@ const LogoUpload = ({ setLogoImage }) => {
       setError("Image size should be less than 2MB");
       return;
     }
-    //Sending file to CreateCompany.jsx
-    setLogoImage(file);
 
-    // Create preview URL
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+    setIsImageCropperOpen(true);
   };
 
   const handleImageChange = (e) => {
@@ -75,16 +86,16 @@ const LogoUpload = ({ setLogoImage }) => {
         onDrop={handleDrop}
       >
         <div className="space-y-2 text-center">
-          {preview ? (
+          {croppedImage ? (
             <div className="relative w-32 h-32 mx-auto">
               <img
-                src={preview}
+                src={URL.createObjectURL(croppedImage)}
                 alt="Logo preview"
                 className="w-full h-full object-contain"
               />
               <button
                 onClick={() => {
-                  setPreview(null);
+                  setCroppedImage(null);
                   setError("");
                 }}
                 className="w-4 h-4 absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm flex items-center justify-center"
@@ -116,12 +127,18 @@ const LogoUpload = ({ setLogoImage }) => {
               <p className="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
             </div>
           )}
-
           {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
       </div>
+      {isImageCropperOpen && (
+        <ImageCropper
+          setImage={setCroppedImage}
+          image={selectedImage}
+          setIsCroperOpen={setIsImageCropperOpen}
+        />
+      )}
     </div>
   );
 };
 
-export default LogoUpload;
+export default UploadLogo;

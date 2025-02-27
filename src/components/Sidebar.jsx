@@ -10,18 +10,30 @@ import { CgOrganisation } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Avatar, Button, User } from "@nextui-org/react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadCompany } from "../app/slices/company";
+import API from "../api";
 
 const Sidebar = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
+  const company = useSelector((state) => state.company.data);
+
+  const dispatch = useDispatch();
+
+  // Fetching Company
+  useEffect(() => {
+    const fetchCompany = async () => {
+      const response = await API.get("/api/company");
+      console.log(response.data);
+      dispatch(loadCompany(response.data.data));
+    };
+    fetchCompany();
+  }, []);
+
   const links = [
-    // {
-    //   label: "Profile",
-    //   icon: <CgProfile size={22} />,
-    //   route: "/profile",
-    // },
     {
       label: "Home",
       icon: <IoHomeOutline />,
@@ -53,23 +65,19 @@ const Sidebar = () => {
       route: "/jobs",
     },
     {
-      label: "Company",
-      icon: <CgOrganisation />,
-      route: "/company",
-    },
-    {
       label: "Settings",
       icon: <IoSettingsOutline />,
       route: "/settings",
     },
   ];
 
-  // Removing company section if it doesn't exists
-  useEffect(() => {
-    if (false) {
-      links.splice(6, 1);
-    }
-  }, []);
+  if (company !== null) {
+    links.splice(6, 0, {
+      label: "Company",
+      icon: <CgOrganisation />,
+      route: "/company",
+    });
+  }
 
   useEffect(() => {
     const handler = (e) => {

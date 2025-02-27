@@ -2,23 +2,30 @@ import { Form } from "@nextui-org/form";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import React from "react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { DATE_REGEX } from "../../../utils/contants";
+import API from "../../../api";
+import { useDispatch } from "react-redux";
+import { deleteJob, updateJob } from "../../../app/slices/company";
 
-function CreateJob() {
-  const [isOpen, setisOpen] = useState(false);
+function EditJob({ currentJob }) {
   const [job, setJob] = useState({
-    role: "",
-    description: "",
-    skills: [],
-    experienceInYear: 0,
+    role: currentJob.role,
+    description: currentJob.description,
+    skills: currentJob.skills.join(","),
+    experienceInYear: currentJob.experienceInYear,
     salary: {
-      minRange: 0,
-      maxRange: 0,
+      minRange: currentJob.salary.minRange,
+      maxRange: currentJob.salary.maxRange,
     },
-    locationType: "Office",
-    location: "",
-    deadline: "",
-    openings: 0,
+    locationType: currentJob.locationType,
+    location: currentJob.location,
+    deadline: currentJob.deadline,
+    openings: currentJob.openings,
   });
+  const [isOpen, setisOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   //Handling Input Change
   const handleInputChange = (e) => {
@@ -30,11 +37,48 @@ function CreateJob() {
   //Handling submit form
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(job);
+    if (!DATE_REGEX.test(job.deadline)) {
+      return toast.error("Invalid Deadline Format");
+    }
+
+    const skills = job.skills
+      .split(",")
+      .map((_) => _.trim())
+      .join()
+      .split(",");
+
+    toast.promise(
+      async () => {
+        const response = await API.put(`/api/job/${currentJob._id}`, {
+          ...job,
+          skills,
+        });
+        console.log(response.data);
+        dispatch(updateJob(response.data.data));
+      },
+      {
+        loading: "Job is Updating",
+        success: "Job Updated Successfully",
+        error: "Failed to Update Job",
+      }
+    );
   };
 
   //Handling delete job
-  const handleDeleteJob = () => {};
+  const handleDeleteJob = () => {
+    toast.promise(
+      async () => {
+        const response = await API.delete(`/api/job/${currentJob._id}`);
+        console.log(response.data);
+        dispatch(deleteJob(currentJob));
+      },
+      {
+        loading: "Deleting Job",
+        success: "Job Deleted Successfully",
+        error: "Failed to Delete Job",
+      }
+    );
+  };
 
   return (
     <div className="mt-4">
@@ -42,12 +86,9 @@ function CreateJob() {
         onClick={() => setisOpen((prev) => !prev)}
         className="px-4 py-2 max-w-[360px] rounded-lg border border-color transition-all duration-300 hover:shadow-[0_0_12px_-3px] cursor-pointer"
       >
-        <h1>React Developer</h1>
+        <h1 className="text-xl font-semibold">{currentJob.role}</h1>
         <p>
-          {"This is the testing description for this jos page which I am building".slice(
-            0,
-            50
-          )}
+          {currentJob.description.slice(0, 50)}
           ...
         </p>
       </div>
@@ -81,6 +122,7 @@ function CreateJob() {
             label="Job Description"
             labelPlacement="outside"
             name="description"
+            maxLength={2000}
             value={job.description}
             onChange={handleInputChange}
           />
@@ -92,11 +134,12 @@ function CreateJob() {
             placeholder="Separate skills by comma(,)..."
             type="text"
             name="role"
+            value={job.skills}
             onChange={(e) =>
               setJob((prev) => {
                 return {
-                  ...job,
-                  skills: e.target.value.replaceAll(/\s+/g, " ").split(","),
+                  ...prev,
+                  skills: e.target.value,
                 };
               })
             }
@@ -125,7 +168,7 @@ function CreateJob() {
                 onChange={(e) =>
                   setJob((prev) => {
                     return {
-                      ...job,
+                      ...prev,
                       salary: {
                         minRange: e.target.value,
                         maxRange: prev.salary.maxRange,
@@ -143,7 +186,7 @@ function CreateJob() {
                 onChange={(e) =>
                   setJob((prev) => {
                     return {
-                      ...job,
+                      ...prev,
                       salary: {
                         minRange: prev.salary.minRange,
                         maxRange: e.target.value,
@@ -184,9 +227,13 @@ function CreateJob() {
             />
           )}
 
-          <input
-            type="date"
-            className="px-4 py-2 rounded-xl bg-[#3F3F46]"
+          <Input
+            required
+            type="text"
+            labelPlacement="outside"
+            label="Deadline"
+            placeholder="dd/mm/yyyy"
+            value={job.deadline}
             onChange={(e) =>
               setJob((prev) => {
                 return { ...prev, deadline: e.target.value };
@@ -228,4 +275,4 @@ function CreateJob() {
   );
 }
 
-export default CreateJob;
+export default EditJob;

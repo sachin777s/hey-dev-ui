@@ -5,13 +5,15 @@ import {
   DropdownTrigger,
   useDisclosure,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { CgOrganisation } from "react-icons/cg";
 import EditCompanyModal from "./EditCompanyModal";
+import { useSelector } from "react-redux";
 
 const CompanyInfo = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const company = useSelector((state) => state.company.data);
 
   return (
     <div>
@@ -29,14 +31,18 @@ const CompanyInfo = () => {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <EditCompanyModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <EditCompanyModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onclose={onClose}
+      />
 
       <div className="mt-6 flex items-center justify-center">
         <div className="h-36 md:h-44 w-36 md:w-44 rounded-full border-2 border-[var(--main-color)] overflow-hidden">
-          {false ? (
+          {company.logo ? (
             <img
               className="w-full h-full rounded-full"
-              src="https://pbs.twimg.com/profile_images/1847175865597112320/C0DbR5kX_400x400.jpg"
+              src={company.logo}
               alt="..."
             />
           ) : (
@@ -46,13 +52,9 @@ const CompanyInfo = () => {
       </div>
       <div className="flex items-center flex-col">
         <div className="mt-2 flex flex-col">
-          <span className="text-2xl font-bold text-center">
-            {"Tata Consultant Services"}
-          </span>
+          <span className="text-2xl font-bold text-center">{company.name}</span>
           <span className="max-w-[360px] opacity-70 text-center">
-            {
-              "This is the headline for representing company This is the headline for representing company"
-            }
+            {company.headline}
           </span>
         </div>
       </div>

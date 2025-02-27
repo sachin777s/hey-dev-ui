@@ -34,6 +34,11 @@ const ProfileInfo = () => {
                 Edit Profile
               </Link>
             </DropdownItem>
+            <DropdownItem key="settings">
+              <Link className="block w-full" to={"/create-company"}>
+                Create Company
+              </Link>
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
