@@ -137,7 +137,7 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
         !isReplyHierarchy && "border-b-[0.5px] border-color"
       }`}
     >
-      <Link to={`/profile`} className="block">
+      <Link to={`/${user.username}/posts`} className="block">
         <Avatar src={user.profilePicture} />
         {isReplyHierarchy && (
           <div className="absolute left-[18px] w-[1px] h-[calc(100%-45px)] bg-black dark:bg-white"></div>
@@ -146,11 +146,11 @@ const SinglePost = ({ post, user, isReplyHierarchy }) => {
       <div className="w-full">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <Link to={`/profile`} className="font-semibold">
+            <Link to={`/${user.username}/posts`} className="font-semibold">
               {user.fullName}
             </Link>
             <div className="flex items-center">
-              <Link to={`/profile`} className="opacity-70 hover:underline">
+              <Link to={`/${user.username}/posts`} className="opacity-70 hover:underline">
                 {user.username}
               </Link>
               <BsDot />

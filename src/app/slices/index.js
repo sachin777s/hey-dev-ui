@@ -4,6 +4,7 @@ import postsSlice from "./posts";
 import communitySlice from "./community";
 import companySlice from "./company";
 import jobsSlice from "./jobs";
+import messagedUsersSlice from "./messaged-users";
 
 const rootReducer = combineReducers({
   user: userSlice,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   community: communitySlice,
   company: companySlice,
   jobs: jobsSlice,
+  messagedUsers: messagedUsersSlice,
 });
 
 export default rootReducer;

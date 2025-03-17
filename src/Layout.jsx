@@ -18,6 +18,7 @@ export default function Layout() {
   const dispatch = useDispatch();
 
   const { isSignedIn } = useAuth();
+  const { user } = useUser();
 
   if (!isSignedIn) {
     return <Navigate to={"/authentication"} />;
@@ -27,7 +28,7 @@ export default function Layout() {
     const fetchUserData = async () => {
       try {
         dispatch(fetchUserStart());
-        const response = await API.get("/api/user/profile");
+        const response = await API.get(`/api/user/profile/${user.username}`);
         console.log(response.data.data);
         dispatch(fetchUserSuccess(response.data.data));
       } catch (error) {

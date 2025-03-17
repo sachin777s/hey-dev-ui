@@ -11,3 +11,4 @@ export const POST_IMAGES_FOLDER = "hey-dev-post-images";
 export const POST_VIDEOS_FOLDER = "hey-dev-post-videos";
 export const COMPANY_LOGO_FOLDER = "hey-dev-company-logo";
 export const COMMUNITY_LOGO = "hey-dev-community-logo";
+export const MESSAGE_IMAGES_FOLDER = "hey-dev-message-image-folder"

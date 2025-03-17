@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
             element: <UserList />,
           },
           {
-            path: ":userId",
+            path: ":username",
             element: <MessageUser />,
           },
         ],
@@ -136,7 +136,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "profile",
+        path: ":username",
         element: <Profile />,
         children: [
           {

@@ -18,7 +18,7 @@ const Sidebar = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-
+  const { username } = useSelector((state) => state.user.data);
   const company = useSelector((state) => state.company.data);
 
   const dispatch = useDispatch();
@@ -121,13 +121,13 @@ const Sidebar = () => {
           avatarProps={{
             src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
           }}
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate(`/${username}/posts`)}
         />
 
         <Avatar
           className="mt-4 hidden sm:block xl:hidden"
           src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate(`/${username}/posts`)}
         />
 
         {links.map((item, i) => {

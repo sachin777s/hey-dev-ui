@@ -5,7 +5,9 @@ import { PiIdentificationCardFill } from "react-icons/pi";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const TabSection = () => {
-  const navigate = useNavigate();
+
+  
+
   const links = [
     {
       label: "Posts",
@@ -28,10 +30,6 @@ const TabSection = () => {
       icon: <PiIdentificationCardFill />,
     },
   ];
-
-  useEffect(() => {
-    navigate("/profile/posts");
-  }, []);
 
   return (
     <section>
